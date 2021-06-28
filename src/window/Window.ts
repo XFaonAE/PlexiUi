@@ -23,7 +23,7 @@ new class Window {
                 nodeIntegration: true
             }
         });
-        window.loadURL("http://localhost:8280").then(() => {});
+        window.loadURL("http://localhost:8080").then(() => {});
 
         app.on("browser-window-created", () => {
             console.log("ready");

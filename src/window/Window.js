@@ -23,7 +23,7 @@ new /** @class */ (function () {
                 nodeIntegration: true
             }
         });
-        window.loadURL("http://localhost:8280").then(function () { });
+        window.loadURL("http://localhost:8080").then(function () { });
         app.on("browser-window-created", function () {
             console.log("ready");
         });

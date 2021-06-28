@@ -1,3 +1,3 @@
 <template>
-    <p>Hello</p>
+    <p>Hi PlexiUi</p>
 </template>
