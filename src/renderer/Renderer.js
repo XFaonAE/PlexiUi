@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var vue_1 = __importDefault(require("vue"));
 var Main_vue_1 = __importDefault(require("./render/Main.vue"));
 new /** @class */ (function () {
+    /**
+     * Main VueJS script
+     */
     function Renderer() {
         var viewModel = new vue_1.default({
             el: "#app",

@@ -9,31 +9,18 @@ var Renderer = /** @class */ (function () {
     /**
      * Class managing all processes of the renderer
      */
-    function Renderer() {
+    function Renderer(plexiUi) {
+        this.plexiUi = plexiUi;
         this.renderer = null;
-        this.startRenderer({}, function (event) {
-            switch (event.type) {
-                case "status":
-                    switch (event.data.status) {
-                        case "starting":
-                            console.log("Starting...");
-                            break;
-                        case "ready":
-                            console.log("Ready after: " + event.data.timeTaken + "s");
-                            break;
-                    }
-                    break;
-            }
-        });
+        this.readyTriggered = false;
     }
     /**
      * Start the renderer process
-     * @param { object } rawOptions Any startup options
      * @param { CallableFunction } callback Callback event listener
      * @return { this } Self
      */
-    Renderer.prototype.startRenderer = function (rawOptions, callback) {
-        if (rawOptions === void 0) { rawOptions = {}; }
+    Renderer.prototype.startRenderer = function (callback) {
+        var _this = this;
         if (callback === void 0) { callback = function () { }; }
         var time = 0;
         var timer = setInterval(function () {
@@ -49,15 +36,18 @@ var Renderer = /** @class */ (function () {
         });
         rendererProcess.stdout.on("data", function (data) {
             if (data.toString() == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
-                clearInterval(timer);
-                callback({
-                    type: "status",
-                    data: {
-                        status: "ready",
-                        renderer: rendererProcess,
-                        timeTaken: Math.round(time)
-                    }
-                });
+                if (!_this.readyTriggered) {
+                    _this.readyTriggered = true;
+                    clearInterval(timer);
+                    callback({
+                        type: "status",
+                        data: {
+                            status: "ready",
+                            renderer: rendererProcess,
+                            timeTaken: Math.round(time)
+                        }
+                    });
+                }
             }
         });
         return this;
