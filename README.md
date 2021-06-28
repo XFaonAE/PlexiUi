@@ -1,2 +1,9 @@
-# PlexiUi
-Build cross-platform applications with modern web technologies coupled with ElectronJS and VueJS out of the box!
+'\x1B', '[', '3', '4',  'm',    'i',
+'\x1B', '[', '3', '9',  'm',    ' ',
+'\x1B', '[', '9', '0',  'm',    '｢',
+'w',    'd', 'm', '｣',  '\x1B', '[',
+'3',    '9', 'm', ':',  ' ',    'C',
+'o',    'm', 'p', 'i',  'l',    'e',
+'d',    ' ', 's', 'u',  'c',    'c',
+'e',    's', 's', 'f',  'u',    'l',
+'l',    'y', '.', '\n'
