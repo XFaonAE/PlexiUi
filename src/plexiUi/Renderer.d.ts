@@ -30,5 +30,11 @@ export default class Renderer {
      * @return { this } Self
      */
     startRenderer(callback?: CallableFunction): this;
+    /**
+     * Attach all component change listeners
+     * @param options Full framework options
+     * @param { CallableFunction } callback Callback to trigger on events
+     */
+    attachResourceEvent(options: any, callback?: CallableFunction): void;
 }
 //# sourceMappingURL=Renderer.d.ts.map

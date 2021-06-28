@@ -27,6 +27,7 @@ var PlexiUi = /** @class */ (function () {
         var options = Object.assign(templateOptions, rawOptions);
         var renderer = new Renderer_1.default(this);
         var window = new Window_1.default(this);
+        var resourceEventsAttached = false;
         renderer.plexiUi.plexiCore.terminal.dividerCreate("PlexiUi | Renderer");
         renderer.startCopy(options, function (event) {
             switch (event.type) {
@@ -69,6 +70,24 @@ var PlexiUi = /** @class */ (function () {
                                                                 case "ready":
                                                                     _this.plexiCore.terminal.writeSpinner("Window process started after " + event.data.timeTaken + "s");
                                                                     _this.plexiCore.terminal.exitSpinner("success");
+                                                                    if (!resourceEventsAttached) {
+                                                                        resourceEventsAttached = true;
+                                                                        renderer.attachResourceEvent(options, function (event) {
+                                                                            switch (event.type) {
+                                                                                case "status":
+                                                                                    switch (event.data.status) {
+                                                                                        case "starting":
+                                                                                            _this.plexiCore.terminal.writeSpinner("Attaching change listeners...");
+                                                                                            break;
+                                                                                        case "ready":
+                                                                                            _this.plexiCore.terminal.writeSpinner("Change listeners attached after " + event.data.timeTaken + "s");
+                                                                                            _this.plexiCore.terminal.exitSpinner("success");
+                                                                                            break;
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                        });
+                                                                    }
                                                                     break;
                                                             }
                                                             break;
@@ -83,7 +102,6 @@ var PlexiUi = /** @class */ (function () {
                                                     titleHex: "#ff7777"
                                                 });
                                                 console.error(event.data.dump);
-                                                process.exit(0);
                                                 break;
                                         }
                                         break;

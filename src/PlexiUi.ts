@@ -31,9 +31,10 @@ export default class PlexiUi {
             renderDir: ""
         };
 
-        const options = Object.assign(templateOptions, rawOptions);
-        const renderer = new Renderer(this);
-        const window = new Window(this);
+        const options: Options = Object.assign(templateOptions, rawOptions);
+        const renderer: Renderer = new Renderer(this);
+        const window: Window = new Window(this);
+        let resourceEventsAttached: boolean = false;
 
         renderer.plexiUi.plexiCore.terminal.dividerCreate("PlexiUi | Renderer");
 
@@ -86,6 +87,26 @@ export default class PlexiUi {
                                                                 case "ready":
                                                                     this.plexiCore.terminal.writeSpinner("Window process started after " + event.data.timeTaken + "s");
                                                                     this.plexiCore.terminal.exitSpinner("success");
+
+                                                                    if (!resourceEventsAttached) {
+                                                                        resourceEventsAttached = true;
+                                                                        renderer.attachResourceEvent(options, (event: Events) => {
+                                                                            switch (event.type) {
+                                                                                case "status":
+                                                                                    switch (event.data.status) {
+                                                                                        case "starting":
+                                                                                            this.plexiCore.terminal.writeSpinner("Attaching change listeners...");
+                                                                                            break;
+
+                                                                                        case "ready":
+                                                                                            this.plexiCore.terminal.writeSpinner("Change listeners attached after " + event.data.timeTaken + "s");
+                                                                                            this.plexiCore.terminal.exitSpinner("success");
+                                                                                            break;
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                        });
+                                                                    }
                                                                     break;
                                                             }
                                                             break;
@@ -103,7 +124,6 @@ export default class PlexiUi {
                                                 });
 
                                                 console.error(event.data.dump);
-                                                process.exit(0);
                                                 break;
                                         }
                                         break;

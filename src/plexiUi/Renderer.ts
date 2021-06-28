@@ -3,6 +3,9 @@ import path from "path";
 // @ts-ignore
 import fse from "fs-extra";
 import PlexiUi from "../PlexiUi";
+import fs from "fs";
+// @ts-ignore
+import onFileChange from "on-file-change";
 import Events from "./Events";
 
 export default class Renderer {
@@ -87,7 +90,7 @@ export default class Renderer {
             time += 0.1;
         }, 100);
 
-        const rendererProcess = exec("npx webpack serve --mode development --hot --post 8080", {
+        const rendererProcess = exec("npx webpack serve --mode development --hot --port 8080", {
             cwd: path.join(__dirname, "../../")
         });
 
@@ -99,7 +102,7 @@ export default class Renderer {
             }
         });
 
-        rendererProcess.stdout.on("data", (data: any) => {
+        rendererProcess?.stdout?.on("data", (data: any) => {
             if (data.toString() == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
                 if (!this.readyTriggered) {
                     this.readyTriggered = true;
@@ -116,7 +119,7 @@ export default class Renderer {
             }
         });
 
-        rendererProcess.stderr.on("data", (data: any) => {
+        rendererProcess?.stderr?.on("data", (data: any) => {
             clearInterval(timer);
             callback({
                 type: "status",
@@ -130,5 +133,36 @@ export default class Renderer {
         });
 
         return this;
+    }
+
+    /**
+     * Attach all component change listeners
+     * @param options Full framework options
+     * @param { CallableFunction } callback Callback to trigger on events
+     */
+    public attachResourceEvent(options: any, callback: CallableFunction = () => {}) {
+        fs.readdir(options.renderDir, (error: any, files: any) => {
+            files.forEach((value: any, index: number) => {
+                console.log(value)
+                onFileChange(path.join(options.renderDir, value), () => {
+                    this.startCopy(options, (event: Events) => {
+                        switch (event.type) {
+                            case "status":
+                                switch (event.data.status) {
+                                    case "starting":
+                                        this.plexiUi.plexiCore.terminal.writeSpinner("Updating components...");
+                                        break;
+
+                                    case "ready":
+                                        this.plexiUi.plexiCore.terminal.writeSpinner("Components updated after " + event.data.timeTaken + "s");
+                                        this.plexiUi.plexiCore.terminal.exitSpinner("success");
+                                        break;
+                                }
+                                break;
+                        }
+                    });
+                });
+            });
+        });
     }
 }
