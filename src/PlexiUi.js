@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Renderer_1 = __importDefault(require("./plexiUi/Renderer"));
 var plexi_core_1 = __importDefault(require("@axeridev/plexi-core"));
 var Window_1 = __importDefault(require("./plexiUi/Window"));
+var path_1 = __importDefault(require("path"));
 var PlexiUi = /** @class */ (function () {
     /**
      * PlexiUi entry class
      */
     function PlexiUi() {
+        process.chdir(path_1.default.join(__dirname, "../"));
         this.plexiCore = new plexi_core_1.default();
     }
     /**

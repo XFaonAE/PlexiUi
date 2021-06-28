@@ -87,7 +87,7 @@ export default class Renderer {
             time += 0.1;
         }, 100);
 
-        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8080"]);
+        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8280"]);
 
         callback({
             type: "status",

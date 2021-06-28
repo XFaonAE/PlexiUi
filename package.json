@@ -1,5 +1,5 @@
 {
-  "name": "plexi-ui",
+  "name": "@axeridev/plexi-ui",
   "version": "1.0.0",
   "description": "Build cross-platform applications with modern web technologies coupled with ElectronJS and VueJS out of the box!",
   "main": "./src/PlexiUi.js",

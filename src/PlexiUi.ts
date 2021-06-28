@@ -2,6 +2,7 @@ import Renderer from "./plexiUi/Renderer";
 import PlexiCore from "@axeridev/plexi-core";
 import Window from "./plexiUi/Window";
 import Events from "./plexiUi/Events";
+import path from "path";
 
 export default class PlexiUi {
     /**
@@ -13,6 +14,7 @@ export default class PlexiUi {
      * PlexiUi entry class
      */
     public constructor() {
+        process.chdir(path.join(__dirname, "../"));
         this.plexiCore = new PlexiCore();
     }
 
