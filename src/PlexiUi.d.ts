@@ -8,5 +8,10 @@ export default class PlexiUi {
      * PlexiUi entry class
      */
     constructor();
+    /**
+     * Run framework code logic
+     * @param { object } rawOptions Options
+     */
+    run(rawOptions: object): void;
 }
 //# sourceMappingURL=PlexiUi.d.ts.map
