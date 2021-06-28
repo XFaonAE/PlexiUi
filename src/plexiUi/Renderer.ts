@@ -1,7 +1,9 @@
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
 import path from "path";
-import Events from "./Events";
+// @ts-ignore
+import fse from "fs-extra";
 import PlexiUi from "../PlexiUi";
+import Events from "./Events";
 
 export default class Renderer {
     /**
@@ -29,6 +31,52 @@ export default class Renderer {
     }
 
     /**
+     * Start resource copy
+     * @param { Events } options Full set of options
+     * @param { CallableFunction } callback Callback event listener
+     */
+    public startCopy(options: any, callback: CallableFunction = () => {}) {
+        let time: number = 0;
+        let timer = setInterval(() => {
+            time += 0.1;
+        }, 100);
+
+        callback({
+            type: "status",
+            data: {
+                status: "starting",
+                timeTaken: time
+            }
+        });
+
+        fse.copySync(options.renderDir, path.join(__dirname, "../renderer/render"), {
+            overwrite: true
+        }, (error: any) => {
+            if (error) {
+                clearInterval(timer);
+                callback({
+                    type: "status",
+                    data: {
+                        status: "error",
+                        timeTaken: time,
+                        dump: error
+                    }
+                });
+                return;
+            }
+        });
+
+        clearInterval(timer);
+        callback({
+            type: "status",
+            data: {
+                status: "ready",
+                timeTaken: time
+            }
+        });
+    }
+
+    /**
      * Start the renderer process
      * @param { CallableFunction } callback Callback event listener
      * @return { this } Self
@@ -39,7 +87,7 @@ export default class Renderer {
             time += 0.1;
         }, 100);
 
-        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8090"]);
+        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8080"]);
 
         callback({
             type: "status",

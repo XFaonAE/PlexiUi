@@ -19,6 +19,12 @@ export default class Renderer {
      */
     constructor(plexiUi: PlexiUi);
     /**
+     * Start resource copy
+     * @param { Events } options Full set of options
+     * @param { CallableFunction } callback Callback event listener
+     */
+    startCopy(options: any, callback?: CallableFunction): void;
+    /**
      * Start the renderer process
      * @param { CallableFunction } callback Callback event listener
      * @return { this } Self
