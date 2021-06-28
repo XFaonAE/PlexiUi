@@ -12,7 +12,18 @@ var Renderer = /** @class */ (function () {
     function Renderer() {
         this.renderer = null;
         this.startRenderer({}, function (event) {
-            console.log(event);
+            switch (event.type) {
+                case "status":
+                    switch (event.data.status) {
+                        case "starting":
+                            console.log("Starting...");
+                            break;
+                        case "ready":
+                            console.log("Ready after: " + event.data.timeTaken + "s");
+                            break;
+                    }
+                    break;
+            }
         });
     }
     /**
@@ -23,14 +34,30 @@ var Renderer = /** @class */ (function () {
      */
     Renderer.prototype.startRenderer = function (rawOptions, callback) {
         if (rawOptions === void 0) { rawOptions = {}; }
-        if (callback === void 0) { callback = null; }
+        if (callback === void 0) { callback = function () { }; }
+        var time = 0;
+        var timer = setInterval(function () {
+            time += 0.1;
+        }, 100);
         var rendererProcess = child_process_1.spawn(path_1.default.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot"]);
+        callback({
+            type: "status",
+            data: {
+                status: "starting",
+                renderer: rendererProcess
+            }
+        });
         rendererProcess.stdout.on("data", function (data) {
             if (data.toString() == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
-                callback ? ({
+                clearInterval(timer);
+                callback({
                     type: "status",
-                    data: {}
-                }) : ;
+                    data: {
+                        status: "ready",
+                        renderer: rendererProcess,
+                        timeTaken: Math.round(time)
+                    }
+                });
             }
         });
         return this;
