@@ -71,7 +71,9 @@ var Renderer = /** @class */ (function () {
         var timer = setInterval(function () {
             time += 0.1;
         }, 100);
-        var rendererProcess = child_process_1.spawn(path_1.default.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8280"]);
+        var rendererProcess = child_process_1.exec("npx webpack serve --mode development --hot --post 8080", {
+            cwd: path_1.default.join(__dirname, "../../")
+        });
         callback({
             type: "status",
             data: {

@@ -1,4 +1,4 @@
-import { spawn, ChildProcessWithoutNullStreams } from "child_process";
+import { exec, ChildProcessWithoutNullStreams } from "child_process";
 import path from "path";
 // @ts-ignore
 import fse from "fs-extra";
@@ -87,7 +87,9 @@ export default class Renderer {
             time += 0.1;
         }, 100);
 
-        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8280"]);
+        const rendererProcess = exec("npx webpack serve --mode development --hot --post 8080", {
+            cwd: path.join(__dirname, "../../")
+        });
 
         callback({
             type: "status",
