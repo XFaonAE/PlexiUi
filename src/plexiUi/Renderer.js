@@ -71,7 +71,7 @@ var Renderer = /** @class */ (function () {
         var timer = setInterval(function () {
             time += 0.1;
         }, 100);
-        var rendererProcess = child_process_1.spawn(path_1.default.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8080"]);
+        var rendererProcess = child_process_1.spawn(path_1.default.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8280"]);
         callback({
             type: "status",
             data: {
