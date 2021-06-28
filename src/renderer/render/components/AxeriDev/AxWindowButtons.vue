@@ -15,23 +15,21 @@
 </template>
 
 <script>
-    import AxIcon from "./AxIcon";
+    import AxIcon from "./AxIcon.vue";
     
     export default {
-        components: {AxIcon},
+        components: {
+            AxIcon
+        },
         methods: {
             close() {
-                window.close();
+                electron.ipcRenderer.send("closeWindow");
             },
             minimize() {
-                if (this.$electron) {
-                    this.$electron.ipcRenderer.send("minimizeWindow");
-                }
+                electron.ipcRenderer.send("minimizeWindow");
             },
             size() {
-                if (this.$electron) {
-                    this.$electron.ipcRenderer.send("sizeWindow");
-                }
+                electron.ipcRenderer.send("sizeWindow");
             }
         }
     }
@@ -53,7 +51,7 @@
         
         &:hover {
             opacity: 1;
-            background: @layer0;
+            background: @layer1;
         }
         
         i {

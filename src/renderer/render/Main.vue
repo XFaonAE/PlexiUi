@@ -1,6 +1,5 @@
 <template>
     <div>
-        <AxWindowSidebar />
         <AxAppBar />
     </div>
 </template>
@@ -14,11 +13,9 @@
 
 <script>
     import AxAppBar from "./components/AxeriDev/AxAppBar.vue";
-    import AxWindowSidebar from "./components/AxeriDev/AxWindowSidebar.vue";
     
     export default {
         components: {
-            AxWindowSidebar,
             AxAppBar
         }
     }

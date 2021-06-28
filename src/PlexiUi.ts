@@ -49,6 +49,19 @@ export default class PlexiUi {
                                 }
                             });
                             break;
+
+                        case "error":
+                            this.plexiCore.terminal.writeSpinner("Html renderer failed to start after " + event.data.timeTaken + "s");
+                            this.plexiCore.terminal.exitSpinner("error");
+
+                            renderer.plexiUi.plexiCore.terminal.dividerCreate("PlexiUi | Failed", {
+                                barHex: "#ff7777",
+                                titleHex: "#ff7777"
+                            });
+
+                            console.log(event.data.dump);
+                            process.exit(0);
+                            break;
                     }
                     break;
             }
