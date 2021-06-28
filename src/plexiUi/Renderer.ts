@@ -39,7 +39,7 @@ export default class Renderer {
      */
     public startRenderer(rawOptions: object = {}, callback: CallableFunction = () => {}): this {
             let time: number = 0;
-            const timer = setInterval(() => {
+            let timer = setInterval(() => {
                 time += 0.1;
             }, 100);
 
