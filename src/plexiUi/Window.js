@@ -28,7 +28,7 @@ var Window = /** @class */ (function () {
         callback({
             type: "status",
             data: {
-                timeTaken: time,
+                timeTaken: Math.round(time),
                 window: windowProcess,
                 status: "starting"
             }
@@ -38,7 +38,7 @@ var Window = /** @class */ (function () {
             callback({
                 type: "status",
                 data: {
-                    timeTaken: time,
+                    timeTaken: Math.round(time),
                     window: windowProcess,
                     status: "ready"
                 }

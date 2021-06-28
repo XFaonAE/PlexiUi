@@ -23,9 +23,22 @@ new /** @class */ (function () {
                 nodeIntegration: true
             }
         });
-        window.loadURL("http://localhost:8080").then(function () { });
+        window.loadURL("http://localhost:8090").then(function () { });
         app.on("browser-window-created", function () {
             console.log("ready");
+        });
+        ipcMain.on("closeWindow", function (event, args) {
+            window.close();
+        });
+        ipcMain.on("sizeWindow", function (event, args) {
+            if (window.isMaximized()) {
+                window.restore();
+                return;
+            }
+            window.maximize();
+        });
+        ipcMain.on("minimizeWindow", function (event, args) {
+            window.minimize();
         });
     };
     return Window;

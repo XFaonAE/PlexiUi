@@ -32,7 +32,7 @@ export default class Window {
         callback({
             type: "status",
             data: {
-                timeTaken: time,
+                timeTaken: Math.round(time),
                 window: windowProcess,
                 status: "starting"
             }
@@ -43,7 +43,7 @@ export default class Window {
             callback({
                 type: "status",
                 data: {
-                    timeTaken: time,
+                    timeTaken: Math.round(time),
                     window: windowProcess,
                     status: "ready"
                 }

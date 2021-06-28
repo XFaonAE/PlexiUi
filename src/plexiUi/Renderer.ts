@@ -39,7 +39,7 @@ export default class Renderer {
             time += 0.1;
         }, 100);
 
-        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot"]);
+        const rendererProcess = spawn(path.join(__dirname, "../../node_modules/.bin/webpack.cmd"), ["serve", "--mode", "development", "--hot", "--port", "8090"]);
 
         callback({
             type: "status",
@@ -64,6 +64,19 @@ export default class Renderer {
                     });
                 }
             }
+        });
+
+        rendererProcess.stderr.on("data", (data: any) => {
+            clearInterval(timer);
+            callback({
+                type: "status",
+                data: {
+                    status: "error",
+                    timeTaken: Math.round(time),
+                    renderer: rendererProcess,
+                    dump: data.toString()
+                }
+            });
         });
 
         return this;

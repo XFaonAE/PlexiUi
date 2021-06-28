@@ -27,6 +27,7 @@
         -webkit-app-region: drag;
         -webkit-user-select: none;
         align-items: center;
+        background: @layer0;
         
         .section {
             -webkit-app-region: no-drag;
@@ -51,8 +52,12 @@
                 transition-duration: @speed;
                 opacity: 0.6;
                 
+                i {
+                    transform: scale(0.7);
+                }
+                
                 &:hover {
-                    background: @layer0;
+                    background: @layer1;
                     opacity: 1;
                 }
             }

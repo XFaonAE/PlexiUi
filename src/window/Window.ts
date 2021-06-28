@@ -23,10 +23,27 @@ new class Window {
                 nodeIntegration: true
             }
         });
-        window.loadURL("http://localhost:8080").then(() => {});
+        window.loadURL("http://localhost:8090").then(() => {});
 
         app.on("browser-window-created", () => {
             console.log("ready");
+        });
+
+        ipcMain.on("closeWindow", (event: any, args: any) => {
+            window.close();
+        });
+
+        ipcMain.on("sizeWindow", (event: any, args: any) => {
+            if (window.isMaximized()) {
+                window.restore();
+                return;
+            }
+
+            window.maximize();
+        });
+
+        ipcMain.on("minimizeWindow", (event: any, args: any) => {
+            window.minimize();
         });
     }
 }
