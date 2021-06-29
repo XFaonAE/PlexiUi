@@ -1,3 +1,5 @@
 <template>
-    <p>Hi PlexiUi</p>
+    <div>
+        <p>Hi PlexiUi </p>
+    </div>
 </template>

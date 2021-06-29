@@ -141,28 +141,28 @@ export default class Renderer {
      * @param { CallableFunction } callback Callback to trigger on events
      */
     public attachResourceEvent(options: any, callback: CallableFunction = () => {}) {
-        fs.readdir(options.renderDir, (error: any, files: any) => {
-            files.forEach((value: any, index: number) => {
-                console.log(value)
-                onFileChange(path.join(options.renderDir, value), () => {
-                    this.startCopy(options, (event: Events) => {
-                        switch (event.type) {
-                            case "status":
-                                switch (event.data.status) {
-                                    case "starting":
-                                        this.plexiUi.plexiCore.terminal.writeSpinner("Updating components...");
-                                        break;
-
-                                    case "ready":
-                                        this.plexiUi.plexiCore.terminal.writeSpinner("Components updated after " + event.data.timeTaken + "s");
-                                        this.plexiUi.plexiCore.terminal.exitSpinner("success");
-                                        break;
-                                }
-                                break;
-                        }
-                    });
-                });
-            });
-        });
+        // fs.readdir(options.renderDir, (error: any, files: any) => {
+        //     files.forEach((value: any, index: number) => {
+        //         console.log(value)
+        //         onFileChange(path.join(options.renderDir, value), () => {
+        //             this.startCopy(options, (event: Events) => {
+        //                 switch (event.type) {
+        //                     case "status":
+        //                         switch (event.data.status) {
+        //                             case "starting":
+        //                                 this.plexiUi.plexiCore.terminal.writeSpinner("Updating components...");
+        //                                 break;
+        //
+        //                             case "ready":
+        //                                 this.plexiUi.plexiCore.terminal.writeSpinner("Components updated after " + event.data.timeTaken + "s");
+        //                                 this.plexiUi.plexiCore.terminal.exitSpinner("success");
+        //                                 break;
+        //                         }
+        //                         break;
+        //                 }
+        //             });
+        //         });
+        //     });
+        // });
     }
 }

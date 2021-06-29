@@ -7,9 +7,6 @@ var child_process_1 = require("child_process");
 var path_1 = __importDefault(require("path"));
 // @ts-ignore
 var fs_extra_1 = __importDefault(require("fs-extra"));
-var fs_1 = __importDefault(require("fs"));
-// @ts-ignore
-var on_file_change_1 = __importDefault(require("on-file-change"));
 var Renderer = /** @class */ (function () {
     /**
      * Class managing all processes of the renderer
@@ -121,30 +118,30 @@ var Renderer = /** @class */ (function () {
      * @param { CallableFunction } callback Callback to trigger on events
      */
     Renderer.prototype.attachResourceEvent = function (options, callback) {
-        var _this = this;
         if (callback === void 0) { callback = function () { }; }
-        fs_1.default.readdir(options.renderDir, function (error, files) {
-            files.forEach(function (value, index) {
-                console.log(value);
-                on_file_change_1.default(path_1.default.join(options.renderDir, value), function () {
-                    _this.startCopy(options, function (event) {
-                        switch (event.type) {
-                            case "status":
-                                switch (event.data.status) {
-                                    case "starting":
-                                        _this.plexiUi.plexiCore.terminal.writeSpinner("Updating components...");
-                                        break;
-                                    case "ready":
-                                        _this.plexiUi.plexiCore.terminal.writeSpinner("Components updated after " + event.data.timeTaken + "s");
-                                        _this.plexiUi.plexiCore.terminal.exitSpinner("success");
-                                        break;
-                                }
-                                break;
-                        }
-                    });
-                });
-            });
-        });
+        // fs.readdir(options.renderDir, (error: any, files: any) => {
+        //     files.forEach((value: any, index: number) => {
+        //         console.log(value)
+        //         onFileChange(path.join(options.renderDir, value), () => {
+        //             this.startCopy(options, (event: Events) => {
+        //                 switch (event.type) {
+        //                     case "status":
+        //                         switch (event.data.status) {
+        //                             case "starting":
+        //                                 this.plexiUi.plexiCore.terminal.writeSpinner("Updating components...");
+        //                                 break;
+        //
+        //                             case "ready":
+        //                                 this.plexiUi.plexiCore.terminal.writeSpinner("Components updated after " + event.data.timeTaken + "s");
+        //                                 this.plexiUi.plexiCore.terminal.exitSpinner("success");
+        //                                 break;
+        //                         }
+        //                         break;
+        //                 }
+        //             });
+        //         });
+        //     });
+        // });
     };
     return Renderer;
 }());
