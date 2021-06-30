@@ -54,7 +54,7 @@ export default class PlexiUi {
         this.callbackEvent = callback;
 
         const optionsDefault: DevOptions = {
-            renderRoot: path.join(__dirname, "./vue/cache/defaultRender"),
+            renderRoot: path.join(__dirname, "./vue/cache/render"),
             logStatus: true,
             runnerOptions: {},
             skip: {
@@ -64,7 +64,7 @@ export default class PlexiUi {
         };
 
         const options: DevOptions = Object.assign(optionsDefault, rawOptions);
-        const processRunner = new ProcessRunner();
+        const processRunner = new ProcessRunner(this);
         this.options = options;
 
         if (options.logStatus) {

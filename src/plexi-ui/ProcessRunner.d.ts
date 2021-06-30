@@ -1,3 +1,4 @@
+import PlexiUi from "../PlexiUi";
 export interface Processes {
     vue: {
         main: string;
@@ -19,9 +20,13 @@ export default class ProcessRunner {
      */
     processes: Processes;
     /**
+     * @var { PlexiUi } plexiUi PlexiUi class object
+     */
+    plexiUi: PlexiUi;
+    /**
      * Used for running framework component processes
      */
-    constructor();
+    constructor(plexiUi: PlexiUi);
     /**
      * Run a component process
      * @param { string } processName Name of the process
