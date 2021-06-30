@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var ProcessRunner_1 = __importDefault(require("./plexi-ui/ProcessRunner"));
+var plexi_core_1 = __importDefault(require("@axeridev/plexi-core"));
 var PlexiUi = /** @class */ (function () {
     /**
      * PlexiUi framework
@@ -12,9 +13,11 @@ var PlexiUi = /** @class */ (function () {
      * @param { CallableFunction } callback On event callback
      */
     function PlexiUi(rawOptions, callback) {
+        var _this = this;
         if (rawOptions === void 0) { rawOptions = {}; }
         if (callback === void 0) { callback = function () { }; }
         this.callbackEvent = callback;
+        this.plexiCore = new plexi_core_1.default();
         var optionsDefault = {
             renderRoot: path_1.default.join(__dirname, "./vue/cache/defaultRender"),
             logStatus: true,
@@ -26,35 +29,75 @@ var PlexiUi = /** @class */ (function () {
         };
         var options = Object.assign(optionsDefault, rawOptions);
         var processRunner = new ProcessRunner_1.default();
+        this.options = options;
         var procedure = {
             runElectron: function (done) {
                 processRunner.run("electron", options.runnerOptions, function (event) {
-                    console.log("electron ready");
+                    switch (event.type) {
+                        case "status":
+                            switch (event.data.status) {
+                                case "starting":
+                                    _this.logStat("Starting window process...");
+                                    break;
+                                case "ready":
+                                    _this.logStat("Window process is ready after " + event.data.timeTaken + "s", "success");
+                                    break;
+                            }
+                            break;
+                    }
                 });
-                done();
             },
             runVue: function (done) {
                 processRunner.run("vue", options.runnerOptions, function (event) {
-                    console.log("vue ready");
+                    switch (event.type) {
+                        case "status":
+                            switch (event.data.status) {
+                                case "starting":
+                                    _this.logStat("Starting renderer engine...");
+                                    break;
+                                case "ready":
+                                    _this.logStat("Renderer engine is ready after " + event.data.timeTaken + "s", "success");
+                                    break;
+                            }
+                            break;
+                    }
                 });
-                done();
             }
         };
         if (!options.skip.vue) {
             procedure.runVue(function () {
+                _this.logStat("Vue is ready", "success");
             });
         }
         else {
-            console.log("Vue event canceled");
+            this.logStat("Skipping renderer engine", "warning");
         }
         if (!options.skip.electron) {
             procedure.runElectron(function () {
+                _this.logStat("Electron is ready", "success");
             });
         }
         else {
-            console.log("Electron event canceled");
+            this.logStat("Skipping window process", "warning");
         }
     }
+    /**
+     * Log current status if allowed
+     * @param { string } message Status message
+     * @param { string } newState New state for spinner
+     */
+    PlexiUi.prototype.logStat = function (message, newState) {
+        if (message === void 0) { message = null; }
+        if (newState === void 0) { newState = null; }
+        if (this.options.logStatus) {
+            if (message) {
+                this.plexiCore.terminal.animation.write(message);
+            }
+            if (newState) {
+                this.plexiCore.terminal.animation.exitSpinner(newState);
+            }
+        }
+    };
     return PlexiUi;
 }());
 exports.default = PlexiUi;

@@ -9,8 +9,7 @@ new /** @class */ (function () {
         this.plexiUi = new PlexiUi_1.default({
             runnerOptions: {},
             skip: {
-                vue: true,
-                electron: true
+                vue: true
             }
         }, function (event) {
             console.log(event);
