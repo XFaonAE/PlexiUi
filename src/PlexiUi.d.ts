@@ -1,5 +1,5 @@
 import PlexiCore from "@axeridev/plexi-core";
-export interface ConstructorOptions {
+export interface DevOptions {
     renderRoot: string;
     logStatus: boolean;
     runnerOptions: any;
@@ -8,7 +8,10 @@ export interface ConstructorOptions {
         electron: boolean;
     };
 }
-export interface ConstructorEvent {
+export interface PackageOptions {
+    out: string;
+}
+export interface DevEvent {
     type: string;
 }
 export interface Procedure {
@@ -19,26 +22,39 @@ export default class PlexiUi {
     /**
      * @var { CallableFunction } callbackEvent On event callback
      */
-    callbackEvent: CallableFunction;
+    callbackEvent: CallableFunction | undefined;
     /**
      * @var { PlexiCore } plexiCore PlexiCore class object
      */
     plexiCore: PlexiCore;
     /**
-     * @var { ConstructorOptions } options Options
+     * @var { DevOptions } options Options
      */
-    options: ConstructorOptions;
+    options: DevOptions | undefined;
     /**
      * PlexiUi framework
+     */
+    constructor();
+    /**
+     * PlexiUi framework dev runner
      * @param { object } rawOptions Options
      * @param { CallableFunction } callback On event callback
      */
-    constructor(rawOptions?: object, callback?: CallableFunction);
+    dev(rawOptions?: object, callback?: CallableFunction): void;
+    /**
+     * Package application
+     * @param { object } rawOptions Options
+     */
+    package(rawOptions?: object): void;
     /**
      * Log current status if allowed
      * @param { string } message Status message
      * @param { string } newState New state for spinner
      */
     logStat(message?: string | null, newState?: string | null): void;
+    /**
+     * Exit framework
+     */
+    exit(): void;
 }
 //# sourceMappingURL=PlexiUi.d.ts.map

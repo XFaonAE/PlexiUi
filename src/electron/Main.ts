@@ -1,4 +1,6 @@
 const { BrowserWindow, app, ipcMain } = require("electron");
+const electronIsDev = require("electron-is-dev");
+const path = require("path");
 
 new class Main {
     public constructor() {
@@ -12,7 +14,12 @@ new class Main {
                 }
             });
 
-            window.loadURL("http://localhost:8080").then(() => {});
+            if (electronIsDev) {
+                window.loadURL("http://localhost:8080").then(() => {});
+                return;
+            }
+
+            window.loadFile(path.join(__dirname, "../vue/cache/build/index.html")).then(() => {});
         });
     }
 }

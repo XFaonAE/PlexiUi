@@ -2,9 +2,10 @@
   "name": "@axeridev/plexi-ui",
   "version": "1.0.0",
   "description": "Build cross-platform applications with modern web technologies coupled with ElectronJS and VueJS out of the box!",
-  "main": "./src/PlexiUi.js",
+  "main": "./src/electron/Main.js",
   "scripts": {
-    "test": "node test/PlexiUi.test.js"
+    "test:build": "node ./test/scripts/Pack.js",
+    "test:dev": "node ./test/PlexiUiTest.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
     "electron": "^13.1.4",
+    "electron-is-dev": "^2.0.0",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "^5.3.2",
     "less": "^4.1.1",
@@ -38,5 +40,8 @@
     "webpack": "^5.40.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.2.0"
   }
 }

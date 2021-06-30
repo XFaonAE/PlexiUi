@@ -6,11 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PlexiUi_1 = __importDefault(require("../src/PlexiUi"));
 new /** @class */ (function () {
     function PlexiUiTest() {
-        this.plexiUi = new PlexiUi_1.default({
-            runnerOptions: {},
-            skip: {
-                vue: false
-            }
+        this.plexiUi = new PlexiUi_1.default();
+        this.plexiUi.dev({
+            runnerOptions: {}
         }, function (event) {
             console.log(event);
         });

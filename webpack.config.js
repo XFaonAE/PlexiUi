@@ -8,6 +8,9 @@ module.exports = {
     node: {
         __dirname: false
     },
+    output: {
+        path: path.join(__dirname, "./src/vue/cache/build")
+    },
     module: {
         rules: [
             {
