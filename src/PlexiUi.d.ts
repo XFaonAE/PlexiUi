@@ -8,9 +8,6 @@ export interface DevOptions {
         electron: boolean;
     };
 }
-export interface PackageOptions {
-    out: string;
-}
 export interface DevEvent {
     type: string;
 }

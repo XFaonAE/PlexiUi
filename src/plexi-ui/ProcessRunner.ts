@@ -62,7 +62,7 @@ export default class ProcessRunner {
                         time++;
                     }, 1000);
 
-                    const vueProcess = exec("webpack serve --mode development --hot", {
+                    const vueProcess = exec("npx webpack serve --mode development --hot", {
                         cwd: path.join(__dirname, "../../")
                     });
                     eventCallback({
@@ -92,15 +92,17 @@ export default class ProcessRunner {
                     });
 
                     vueProcess.stderr?.on("data", (data) => {
-                        eventCallback({
-                            type: "status",
-                            data: {
-                                status: "error",
-                                process: vueProcess,
-                                timeTaken: time,
-                                dump: data
-                            }
-                        });
+                        if (!ready) {
+                            eventCallback({
+                                type: "status",
+                                data: {
+                                    status: "error",
+                                    process: vueProcess,
+                                    timeTaken: time,
+                                    dump: data
+                                }
+                            });
+                        }
                     });
                 }
                 break;

@@ -1,4 +1,4 @@
-import PlexiUi, {DevEvent, DevOptions} from "../src/PlexiUi";
+import PlexiUi, { DevEvent, DevOptions } from "../src/PlexiUi";
 
 new class PlexiUiTest {
     public plexiUi: PlexiUi;

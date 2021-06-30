@@ -41,7 +41,7 @@ var ProcessRunner = /** @class */ (function () {
                     var timer_1 = setInterval(function () {
                         time_1++;
                     }, 1000);
-                    var vueProcess_1 = child_process_1.exec("webpack serve --mode development --hot", {
+                    var vueProcess_1 = child_process_1.exec("npx webpack serve --mode development --hot", {
                         cwd: path_1.default.join(__dirname, "../../")
                     });
                     eventCallback({
@@ -69,15 +69,17 @@ var ProcessRunner = /** @class */ (function () {
                         }
                     });
                     (_b = vueProcess_1.stderr) === null || _b === void 0 ? void 0 : _b.on("data", function (data) {
-                        eventCallback({
-                            type: "status",
-                            data: {
-                                status: "error",
-                                process: vueProcess_1,
-                                timeTaken: time_1,
-                                dump: data
-                            }
-                        });
+                        if (!ready) {
+                            eventCallback({
+                                type: "status",
+                                data: {
+                                    status: "error",
+                                    process: vueProcess_1,
+                                    timeTaken: time_1,
+                                    dump: data
+                                }
+                            });
+                        }
                     });
                 }
                 break;
