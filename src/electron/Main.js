@@ -1,6 +1,5 @@
 "use strict";
 var _a = require("electron"), BrowserWindow = _a.BrowserWindow, app = _a.app, ipcMain = _a.ipcMain;
-var electronIsDev = require("electron-is-dev");
 var path = require("path");
 new /** @class */ (function () {
     function Main() {
@@ -14,7 +13,7 @@ new /** @class */ (function () {
                     contextIsolation: false
                 }
             });
-            if (electronIsDev) {
+            if (process.env.NODE_ENV !== "production") {
                 window.loadURL("http://localhost:8080").then(function () { });
                 return;
             }
