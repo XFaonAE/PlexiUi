@@ -7,9 +7,7 @@ var PlexiUi_1 = __importDefault(require("../src/PlexiUi"));
 new /** @class */ (function () {
     function PlexiUiTest() {
         this.plexiUi = new PlexiUi_1.default();
-        this.plexiUi.dev({
-            runnerOptions: {}
-        }, function (event) {
+        this.plexiUi.dev({}, function (event) {
             console.log(event);
         });
     }

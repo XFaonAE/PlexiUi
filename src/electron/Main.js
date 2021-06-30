@@ -8,6 +8,7 @@ new /** @class */ (function () {
             var window = new BrowserWindow({
                 width: 1400,
                 height: 700,
+                frame: false,
                 webPreferences: {
                     nodeIntegration: true,
                     contextIsolation: false
