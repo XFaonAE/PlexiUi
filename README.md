@@ -9,7 +9,7 @@ Welcome to PlexiUi framework! This framework was created to help make better des
 ## Installation
 Run the following command to install this library.
 ```bash
-npm install github:AxeriDev/PlexiCore
+npm install github:AxeriDev/PlexiUi
 ```
 
 To update the framework, just check the GitHub repository and then run the same command again, that's it!
