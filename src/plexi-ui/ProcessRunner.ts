@@ -90,6 +90,18 @@ export default class ProcessRunner {
                             }
                         }
                     });
+
+                    vueProcess.stderr?.on("data", (data) => {
+                        eventCallback({
+                            type: "status",
+                            data: {
+                                status: "error",
+                                process: vueProcess,
+                                timeTaken: time,
+                                dump: data
+                            }
+                        });
+                    });
                 }
                 break;
 

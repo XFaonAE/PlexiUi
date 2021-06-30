@@ -27,7 +27,7 @@ var ProcessRunner = /** @class */ (function () {
      * @param { CallableFunction } eventCallback Event callback
      */
     ProcessRunner.prototype.run = function (processName, rawOptions, eventCallback) {
-        var _a;
+        var _a, _b;
         if (eventCallback === void 0) { eventCallback = function () { }; }
         var optionsDefault = {
             processes: this.processes
@@ -67,6 +67,17 @@ var ProcessRunner = /** @class */ (function () {
                                 });
                             }
                         }
+                    });
+                    (_b = vueProcess_1.stderr) === null || _b === void 0 ? void 0 : _b.on("data", function (data) {
+                        eventCallback({
+                            type: "status",
+                            data: {
+                                status: "error",
+                                process: vueProcess_1,
+                                timeTaken: time_1,
+                                dump: data
+                            }
+                        });
                     });
                 }
                 break;
