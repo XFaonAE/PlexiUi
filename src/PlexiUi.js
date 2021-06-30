@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var ProcessRunner_1 = __importDefault(require("./plexi-ui/ProcessRunner"));
 var plexi_core_1 = __importDefault(require("@axeridev/plexi-core"));
-var child_process_1 = require("child_process");
+var Packager_1 = __importDefault(require("./plexi-ui/Packager"));
 var PlexiUi = /** @class */ (function () {
     /**
      * PlexiUi framework
@@ -106,40 +106,38 @@ var PlexiUi = /** @class */ (function () {
      */
     PlexiUi.prototype.package = function (rawOptions) {
         var _this = this;
-        var _a;
         if (rawOptions === void 0) { rawOptions = {}; }
-        var time = 0;
-        var timer = setInterval(function () {
-            time++;
-        }, 1000);
-        var defaultOptions = {
-            out: path_1.default.join(__dirname, "./vue/cache/build")
-        };
-        var options = Object.assign(defaultOptions, rawOptions);
-        this.plexiCore.terminal.dividerCreate("PlexiUi | Packager");
-        this.plexiCore.terminal.animation.write("Compiling renderer resources...");
-        var renderPackagerProcess = child_process_1.exec("npx webpack --mode production");
-        (_a = renderPackagerProcess.stdout) === null || _a === void 0 ? void 0 : _a.on("data", function (data) {
-            var _a;
-            clearInterval(timer);
-            _this.plexiCore.terminal.animation.write("Finished compiling renderer after " + time + "s");
-            _this.plexiCore.terminal.animation.exitSpinner("success");
-            time = 0;
-            timer = setInterval(function () {
-                time++;
-            }, 1000);
-            _this.plexiCore.terminal.animation.write("Writing package for win32");
-            var packagerProcess = child_process_1.exec("npx electron-packager ./ --overwrite --platform=win32 --out=" + options.out, {
-                cwd: path_1.default.join(__dirname, "../")
-            });
-            (_a = packagerProcess.stderr) === null || _a === void 0 ? void 0 : _a.on("data", function (data) {
-                if (data.startsWith("Wrote new app to ")) {
-                    clearInterval(timer);
-                    _this.plexiCore.terminal.animation.write("Finished writing package for win32 after " + time + "s");
-                    _this.plexiCore.terminal.animation.exitSpinner("success");
-                    _this.exit();
-                }
-            });
+        this.plexiCore.terminal.dividerCreate("PlexiUi | Packaging");
+        var packager = new Packager_1.default(this);
+        packager.pack(rawOptions, function (event) {
+            switch (event.type) {
+                case "status":
+                    switch (event.data.on) {
+                        case "renderer-pack":
+                            switch (event.data.status) {
+                                case "starting":
+                                    _this.plexiCore.terminal.animation.write("Packing renderer resources...");
+                                    break;
+                                case "ready":
+                                    _this.plexiCore.terminal.animation.write("Packed renderer resources after " + event.data.timeTaken + "s");
+                                    _this.plexiCore.terminal.animation.exitSpinner("success");
+                                    break;
+                            }
+                            break;
+                        case "win-pack":
+                            switch (event.data.status) {
+                                case "starting":
+                                    _this.plexiCore.terminal.animation.write("Packing window resources...");
+                                    break;
+                                case "ready":
+                                    _this.plexiCore.terminal.animation.write("Packed window resources after " + event.data.timeTaken + "s");
+                                    _this.plexiCore.terminal.animation.exitSpinner("success");
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+            }
         });
     };
     /**
