@@ -5,9 +5,14 @@ new class PlexiUiTest {
 
     public constructor() {
         this.plexiUi = new PlexiUi({
-
+            runnerOptions: {
+            },
+            skip: {
+                vue: true,
+                electron: true
+            }
         }, (event: ConstructorEvent) => {
-
+            console.log(event);
         });
     }
 }
