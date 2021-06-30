@@ -1,4 +1,5 @@
-import PlexiUi, { DevEvent, DevOptions } from "../src/PlexiUi";
+import PlexiUi, { DevEvent } from "../src/PlexiUi";
+import path from "path";
 
 new class PlexiUiTest {
     public plexiUi: PlexiUi;
@@ -6,7 +7,7 @@ new class PlexiUiTest {
     public constructor() {
         this.plexiUi = new PlexiUi();
         this.plexiUi.dev({
-            runnerOptions: {}
+            renderRoot: path.join(__dirname, "./render")
         }, (event: DevEvent) => {
             console.log(event);
         });

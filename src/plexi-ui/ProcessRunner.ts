@@ -1,6 +1,9 @@
 import path from "path";
 import electron from "electron";
+import { ncp } from "ncp";
 import { spawn, exec } from "child_process";
+import PlexiUi from "../PlexiUi";
+import chokidar from "chokidar";
 
 export interface Processes {
     vue: {
@@ -27,9 +30,15 @@ export default class ProcessRunner {
     public processes: Processes;
 
     /**
+     * @var { PlexiUi } plexiUi PlexiUi class object
+     */
+    public plexiUi: PlexiUi;
+
+    /**
      * Used for running framework component processes
      */
-    public constructor() {
+    public constructor(plexiUi: PlexiUi) {
+        this.plexiUi = plexiUi;
         this.processes = {
             vue: {
                 main: path.join(__dirname, "../vue/Main.js")
@@ -62,6 +71,12 @@ export default class ProcessRunner {
                         time++;
                     }, 1000);
 
+                    const updateResources = () => {
+                        ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/cache/render"), (error: any) => {});
+                    }
+
+                    updateResources();
+                        
                     const vueProcess = exec("npx webpack serve --mode development --hot", {
                         cwd: path.join(__dirname, "../../")
                     });
@@ -75,6 +90,7 @@ export default class ProcessRunner {
                     });
 
                     vueProcess.stdout?.on("data", (data: any) => {
+                        console.log(data)
                         if (!ready) {
                             if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
                                 ready = true;
@@ -133,6 +149,22 @@ export default class ProcessRunner {
                                 timeTaken: time,
                                 process: electronProcess
                             }
+                        });
+
+                        const fileWatcher = chokidar.watch(this.plexiUi.options?.renderRoot, {
+                            ignored: /^\./, persistent: true
+                        });
+
+                        const updateResources = () => {
+                            ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/cache/render"), (error: any) => {});
+                        }
+
+                        fileWatcher.on("add", (path: any) => {
+                            updateResources();
+                        }).on("change", (path: any) => {
+                            updateResources();
+                        }).on("unlink", (path: any) => {
+                            updateResources();
                         });
                     });
                 }

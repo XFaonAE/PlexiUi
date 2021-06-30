@@ -5,12 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var electron_1 = __importDefault(require("electron"));
+var ncp_1 = require("ncp");
 var child_process_1 = require("child_process");
+var chokidar_1 = __importDefault(require("chokidar"));
 var ProcessRunner = /** @class */ (function () {
     /**
      * Used for running framework component processes
      */
-    function ProcessRunner() {
+    function ProcessRunner(plexiUi) {
+        this.plexiUi = plexiUi;
         this.processes = {
             vue: {
                 main: path_1.default.join(__dirname, "../vue/Main.js")
@@ -27,6 +30,7 @@ var ProcessRunner = /** @class */ (function () {
      * @param { CallableFunction } eventCallback Event callback
      */
     ProcessRunner.prototype.run = function (processName, rawOptions, eventCallback) {
+        var _this = this;
         var _a, _b;
         if (eventCallback === void 0) { eventCallback = function () { }; }
         var optionsDefault = {
@@ -41,6 +45,11 @@ var ProcessRunner = /** @class */ (function () {
                     var timer_1 = setInterval(function () {
                         time_1++;
                     }, 1000);
+                    var updateResources = function () {
+                        var _a;
+                        ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/cache/render"), function (error) { });
+                    };
+                    updateResources();
                     var vueProcess_1 = child_process_1.exec("npx webpack serve --mode development --hot", {
                         cwd: path_1.default.join(__dirname, "../../")
                     });
@@ -53,6 +62,7 @@ var ProcessRunner = /** @class */ (function () {
                         }
                     });
                     (_a = vueProcess_1.stdout) === null || _a === void 0 ? void 0 : _a.on("data", function (data) {
+                        console.log(data);
                         if (!ready) {
                             if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
                                 ready = true;
@@ -99,6 +109,7 @@ var ProcessRunner = /** @class */ (function () {
                         }
                     });
                     electronProcess_1.stdout.on("data", function () {
+                        var _a;
                         clearInterval(timer_2);
                         eventCallback({
                             type: "status",
@@ -107,6 +118,20 @@ var ProcessRunner = /** @class */ (function () {
                                 timeTaken: time_2,
                                 process: electronProcess_1
                             }
+                        });
+                        var fileWatcher = chokidar_1.default.watch((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, {
+                            ignored: /^\./, persistent: true
+                        });
+                        var updateResources = function () {
+                            var _a;
+                            ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/cache/render"), function (error) { });
+                        };
+                        fileWatcher.on("add", function (path) {
+                            updateResources();
+                        }).on("change", function (path) {
+                            updateResources();
+                        }).on("unlink", function (path) {
+                            updateResources();
                         });
                     });
                 }

@@ -25,7 +25,7 @@ var PlexiUi = /** @class */ (function () {
         if (callback === void 0) { callback = function () { }; }
         this.callbackEvent = callback;
         var optionsDefault = {
-            renderRoot: path_1.default.join(__dirname, "./vue/cache/defaultRender"),
+            renderRoot: path_1.default.join(__dirname, "./vue/cache/render"),
             logStatus: true,
             runnerOptions: {},
             skip: {
@@ -34,7 +34,7 @@ var PlexiUi = /** @class */ (function () {
             }
         };
         var options = Object.assign(optionsDefault, rawOptions);
-        var processRunner = new ProcessRunner_1.default();
+        var processRunner = new ProcessRunner_1.default(this);
         this.options = options;
         if (options.logStatus) {
             this.plexiCore.terminal.dividerCreate("PlexiUi | Development");
