@@ -1,4 +1,6 @@
 import path from "path";
+import electron from "electron";
+import { spawn } from "child_process";
 
 export interface Processes {
     vue: {
@@ -15,6 +17,7 @@ export interface RunOptions {
 
 export interface  ProcessEvent {
     type: string;
+    data: any;
 }
 
 export default class ProcessRunner {
@@ -52,17 +55,38 @@ export default class ProcessRunner {
 
         switch (processName.toLowerCase()) {
             case "vue":
-                console.log(options.processes.vue);
+                const webpackExe = path.join(require.resolve("module"))
                 break;
 
             case "electron":
-                console.log(options.processes.electron);
+                let time = 0;
+                let timer = setInterval(() => {
+                    time++;
+                }, 1000);
+
+                const electronProcess = spawn(<string><unknown>electron, [path.join(__dirname, "../electron/Main.js")]);
+                eventCallback({
+                    type: "status",
+                    data: {
+                        status: "starting",
+                        timeTaken: time
+                    }
+                });
+
+                electronProcess.stdout.on("data", () => {
+                    clearInterval(timer);
+                    eventCallback({
+                        type: "status",
+                        data: {
+                            status: "ready",
+                            timeTaken: time
+                        }
+                    });
+                });
                 break;
 
             default:
                 throw new Error("[ " + processName + " ] is not a valid process");
         }
-
-        eventCallback();
     }
 }

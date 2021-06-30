@@ -11,6 +11,7 @@ export interface RunOptions {
 }
 export interface ProcessEvent {
     type: string;
+    data: any;
 }
 export default class ProcessRunner {
     /**
