@@ -1,6 +1,6 @@
 import path from "path";
 import electron from "electron";
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 
 export interface Processes {
     vue: {
@@ -52,37 +52,76 @@ export default class ProcessRunner {
         }
 
         const options: RunOptions = Object.assign(optionsDefault, rawOptions);
+        let ready: boolean = false;
 
         switch (processName.toLowerCase()) {
             case "vue":
-                const webpackExe = path.join(require.resolve("module"))
-                break;
+                {
+                    let time = 0;
+                    let timer = setInterval(() => {
+                        time++;
+                    }, 1000);
 
-            case "electron":
-                let time = 0;
-                let timer = setInterval(() => {
-                    time++;
-                }, 1000);
-
-                const electronProcess = spawn(<string><unknown>electron, [path.join(__dirname, "../electron/Main.js")]);
-                eventCallback({
-                    type: "status",
-                    data: {
-                        status: "starting",
-                        timeTaken: time
-                    }
-                });
-
-                electronProcess.stdout.on("data", () => {
-                    clearInterval(timer);
+                    const vueProcess = exec("webpack serve --mode development --hot", {
+                        cwd: path.join(__dirname, "../../")
+                    });
                     eventCallback({
                         type: "status",
                         data: {
-                            status: "ready",
-                            timeTaken: time
+                            status: "starting",
+                            timeTaken: time,
+                            process: vueProcess
                         }
                     });
-                });
+
+                    vueProcess.stdout?.on("data", (data: any) => {
+                        if (!ready) {
+                            if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
+                                ready = true;
+                                clearInterval(timer);
+                                eventCallback({
+                                    type: "status",
+                                    data: {
+                                        status: "ready",
+                                        process: vueProcess,
+                                        timeTaken: time
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                break;
+
+            case "electron":
+                {
+                    let time = 0;
+                    let timer = setInterval(() => {
+                        time++;
+                    }, 1000);
+
+                    const electronProcess = spawn(<string><unknown>electron, [path.join(__dirname, "../electron/Main.js")]);
+                    eventCallback({
+                        type: "status",
+                        data: {
+                            status: "starting",
+                            timeTaken: time,
+                            process: electronProcess
+                        }
+                    });
+
+                    electronProcess.stdout.on("data", () => {
+                        clearInterval(timer);
+                        eventCallback({
+                            type: "status",
+                            data: {
+                                status: "ready",
+                                timeTaken: time,
+                                process: electronProcess
+                            }
+                        });
+                    });
+                }
                 break;
 
             default:

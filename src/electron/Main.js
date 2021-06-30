@@ -11,6 +11,7 @@ new /** @class */ (function () {
                     contextIsolation: false
                 }
             });
+            window.loadURL("http://localhost:8080").then(function () { });
         });
     }
     return Main;

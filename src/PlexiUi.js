@@ -32,6 +32,7 @@ var PlexiUi = /** @class */ (function () {
         this.options = options;
         var procedure = {
             runElectron: function (done) {
+                if (done === void 0) { done = function () { }; }
                 processRunner.run("electron", options.runnerOptions, function (event) {
                     switch (event.type) {
                         case "status":
@@ -41,6 +42,7 @@ var PlexiUi = /** @class */ (function () {
                                     break;
                                 case "ready":
                                     _this.logStat("Window process is ready after " + event.data.timeTaken + "s", "success");
+                                    done();
                                     break;
                             }
                             break;
@@ -48,6 +50,7 @@ var PlexiUi = /** @class */ (function () {
                 });
             },
             runVue: function (done) {
+                if (done === void 0) { done = function () { }; }
                 processRunner.run("vue", options.runnerOptions, function (event) {
                     switch (event.type) {
                         case "status":
@@ -57,6 +60,7 @@ var PlexiUi = /** @class */ (function () {
                                     break;
                                 case "ready":
                                     _this.logStat("Renderer engine is ready after " + event.data.timeTaken + "s", "success");
+                                    done();
                                     break;
                             }
                             break;
@@ -66,19 +70,22 @@ var PlexiUi = /** @class */ (function () {
         };
         if (!options.skip.vue) {
             procedure.runVue(function () {
-                _this.logStat("Vue is ready", "success");
+                if (!options.skip.electron) {
+                    procedure.runElectron();
+                }
+                else {
+                    _this.logStat("Skipping window process", "warning");
+                }
             });
         }
         else {
             this.logStat("Skipping renderer engine", "warning");
-        }
-        if (!options.skip.electron) {
-            procedure.runElectron(function () {
-                _this.logStat("Electron is ready", "success");
-            });
-        }
-        else {
-            this.logStat("Skipping window process", "warning");
+            if (!options.skip.electron) {
+                procedure.runElectron();
+            }
+            else {
+                this.logStat("Skipping window process", "warning");
+            }
         }
     }
     /**

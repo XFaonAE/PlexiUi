@@ -61,7 +61,7 @@ export default class PlexiUi {
         this.options = options;
 
         const procedure: Procedure = {
-            runElectron: (done: CallableFunction) => {
+            runElectron: (done: CallableFunction = () => {}) => {
                 processRunner.run("electron", options.runnerOptions, (event: ProcessEvent) => {
                     switch (event.type) {
                         case "status":
@@ -72,13 +72,14 @@ export default class PlexiUi {
 
                                 case "ready":
                                     this.logStat("Window process is ready after " + event.data.timeTaken + "s", "success");
+                                    done();
                                     break;
                             }
                             break;
                     }
                 });
             },
-            runVue: (done: CallableFunction) => {
+            runVue: (done: CallableFunction = () => {}) => {
                 processRunner.run("vue", options.runnerOptions, (event: ProcessEvent) => {
                     switch (event.type) {
                         case "status":
@@ -89,6 +90,7 @@ export default class PlexiUi {
 
                                 case "ready":
                                     this.logStat("Renderer engine is ready after " + event.data.timeTaken + "s", "success");
+                                    done();
                                     break;
                             }
                             break;
@@ -99,18 +101,19 @@ export default class PlexiUi {
 
         if (!options.skip.vue) {
             procedure.runVue(() => {
-                this.logStat("Vue is ready", "success");
+                if (!options.skip.electron) {
+                    procedure.runElectron();
+                } else {
+                    this.logStat("Skipping window process", "warning");
+                }
             });
         } else {
             this.logStat("Skipping renderer engine", "warning");
-        }
-
-        if (!options.skip.electron) {
-            procedure.runElectron(() => {
-                this.logStat("Electron is ready", "success");
-            });
-        } else {
-            this.logStat("Skipping window process", "warning");
+            if (!options.skip.electron) {
+                procedure.runElectron();
+            } else {
+                this.logStat("Skipping window process", "warning");
+            }
         }
     }
 

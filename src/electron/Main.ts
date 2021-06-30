@@ -11,6 +11,8 @@ new class Main {
                     contextIsolation: false
                 }
             });
+
+            window.loadURL("http://localhost:8080").then(() => {});
         });
     }
 }
