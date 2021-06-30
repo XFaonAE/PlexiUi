@@ -1,4 +1,5 @@
 const { BrowserWindow, app, ipcMain } = require("electron");
+const electronIsDev = require("electron-is-dev");
 const path = require("path");
 
 new class Main {
@@ -14,7 +15,7 @@ new class Main {
                 }
             });
 
-            if (process.env.NODE_ENV !== "production") {
+            if (electronIsDev) {
                 window.loadURL("http://localhost:8080").then(() => {});
                 return;
             }
