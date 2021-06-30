@@ -3,116 +3,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Renderer_1 = __importDefault(require("./plexiUi/Renderer"));
-var plexi_core_1 = __importDefault(require("@axeridev/plexi-core"));
-var Window_1 = __importDefault(require("./plexiUi/Window"));
 var path_1 = __importDefault(require("path"));
+var ProcessRunner_1 = __importDefault(require("./plexi-ui/ProcessRunner"));
 var PlexiUi = /** @class */ (function () {
     /**
-     * PlexiUi entry class
-     */
-    function PlexiUi() {
-        process.chdir(path_1.default.join(__dirname, "../"));
-        this.plexiCore = new plexi_core_1.default();
-    }
-    /**
-     * Run framework code logic
+     * PlexiUi framework
      * @param { object } rawOptions Options
+     * @param { CallableFunction } callback On event callback
      */
-    PlexiUi.prototype.run = function (rawOptions) {
-        var _this = this;
-        var templateOptions = {
-            renderDir: ""
-        };
-        var options = Object.assign(templateOptions, rawOptions);
-        var renderer = new Renderer_1.default(this);
-        var window = new Window_1.default(this);
-        var resourceEventsAttached = false;
-        renderer.plexiUi.plexiCore.terminal.dividerCreate("PlexiUi | Renderer");
-        renderer.startCopy(options, function (event) {
-            switch (event.type) {
-                case "status":
-                    switch (event.data.status) {
-                        case "starting":
-                            _this.plexiCore.terminal.writeSpinner("Starting Html renderer resource copy...");
-                            break;
-                        case "error":
-                            _this.plexiCore.terminal.writeSpinner("Failed to copy Html renderer resources after " + event.data.timeTaken + "s");
-                            _this.plexiCore.terminal.exitSpinner("error");
-                            _this.plexiCore.terminal.dividerCreate("PlexiUi | Failed", {
-                                barHex: "#ff7777",
-                                titleHex: "#ff7777"
-                            });
-                            console.error(event.data.dump);
-                            process.exit(0);
-                            break;
-                        case "ready":
-                            _this.plexiCore.terminal.writeSpinner("Html renderer resource copy finished after " + event.data.timeTaken + "s");
-                            _this.plexiCore.terminal.exitSpinner("success");
-                            renderer.startRenderer(function (event) {
-                                switch (event.type) {
-                                    case "status":
-                                        switch (event.data.status) {
-                                            case "starting":
-                                                _this.plexiCore.terminal.writeSpinner("Starting Html renderer...");
-                                                break;
-                                            case "ready":
-                                                _this.plexiCore.terminal.writeSpinner("Html renderer started after " + event.data.timeTaken + "s");
-                                                _this.plexiCore.terminal.exitSpinner("success");
-                                                window.startWindow(function (event) {
-                                                    switch (event.type) {
-                                                        case "status":
-                                                            switch (event.data.status) {
-                                                                case "starting":
-                                                                    _this.plexiCore.terminal.dividerCreate("PlexiUi | Window");
-                                                                    _this.plexiCore.terminal.writeSpinner("Starting window process...");
-                                                                    break;
-                                                                case "ready":
-                                                                    _this.plexiCore.terminal.writeSpinner("Window process started after " + event.data.timeTaken + "s");
-                                                                    _this.plexiCore.terminal.exitSpinner("success");
-                                                                    if (!resourceEventsAttached) {
-                                                                        resourceEventsAttached = true;
-                                                                        renderer.attachResourceEvent(options, function (event) {
-                                                                            switch (event.type) {
-                                                                                case "status":
-                                                                                    switch (event.data.status) {
-                                                                                        case "starting":
-                                                                                            _this.plexiCore.terminal.writeSpinner("Attaching change listeners...");
-                                                                                            break;
-                                                                                        case "ready":
-                                                                                            _this.plexiCore.terminal.writeSpinner("Change listeners attached after " + event.data.timeTaken + "s");
-                                                                                            _this.plexiCore.terminal.exitSpinner("success");
-                                                                                            break;
-                                                                                    }
-                                                                                    break;
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                    break;
-                                                            }
-                                                            break;
-                                                    }
-                                                });
-                                                break;
-                                            case "error":
-                                                _this.plexiCore.terminal.writeSpinner("Html renderer failed to start after " + event.data.timeTaken + "s");
-                                                _this.plexiCore.terminal.exitSpinner("error");
-                                                _this.plexiCore.terminal.dividerCreate("PlexiUi | Failed", {
-                                                    barHex: "#ff7777",
-                                                    titleHex: "#ff7777"
-                                                });
-                                                console.error(event.data.dump);
-                                                break;
-                                        }
-                                        break;
-                                }
-                            });
-                            break;
-                    }
-                    break;
+    function PlexiUi(rawOptions, callback) {
+        if (rawOptions === void 0) { rawOptions = {}; }
+        if (callback === void 0) { callback = function () { }; }
+        this.callbackEvent = callback;
+        var optionsDefault = {
+            renderRoot: path_1.default.join(__dirname, "./vue/cache/defaultRender"),
+            logStatus: true,
+            runnerOptions: {},
+            skip: {
+                vue: false,
+                electron: false
             }
-        });
-    };
+        };
+        var options = Object.assign(optionsDefault, rawOptions);
+        var processRunner = new ProcessRunner_1.default();
+        var procedure = {
+            runElectron: function (done) {
+                processRunner.run("electron", options.runnerOptions, function (event) {
+                    console.log("electron ready");
+                });
+                done();
+            },
+            runVue: function (done) {
+                processRunner.run("vue", options.runnerOptions, function (event) {
+                    console.log("vue ready");
+                });
+                done();
+            }
+        };
+        if (!options.skip.vue) {
+            procedure.runVue(function () {
+            });
+        }
+        else {
+            console.log("Vue event canceled");
+        }
+        if (!options.skip.electron) {
+            procedure.runElectron(function () {
+            });
+        }
+        else {
+            console.log("Electron event canceled");
+        }
+    }
     return PlexiUi;
 }());
 exports.default = PlexiUi;

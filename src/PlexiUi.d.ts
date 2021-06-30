@@ -1,17 +1,29 @@
-import PlexiCore from "@axeridev/plexi-core";
+export interface ConstructorOptions {
+    renderRoot: string;
+    logStatus: boolean;
+    runnerOptions: any;
+    skip: {
+        vue: boolean;
+        electron: boolean;
+    };
+}
+export interface ConstructorEvent {
+    type: string;
+}
+export interface Procedure {
+    runElectron: CallableFunction;
+    runVue: CallableFunction;
+}
 export default class PlexiUi {
     /**
-     * @var { PlexiCore } plexiCore PlexiCore class object
+     * @var { CallableFunction } callbackEvent On event callback
      */
-    plexiCore: PlexiCore;
+    callbackEvent: CallableFunction;
     /**
-     * PlexiUi entry class
-     */
-    constructor();
-    /**
-     * Run framework code logic
+     * PlexiUi framework
      * @param { object } rawOptions Options
+     * @param { CallableFunction } callback On event callback
      */
-    run(rawOptions: object): void;
+    constructor(rawOptions?: object, callback?: CallableFunction);
 }
 //# sourceMappingURL=PlexiUi.d.ts.map
