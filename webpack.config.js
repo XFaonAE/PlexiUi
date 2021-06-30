@@ -4,7 +4,7 @@ const webpack = require("webpack");
 const path = require("path");
 
 module.exports = {
-    entry: "./src/renderer/Renderer.js",
+    entry: "./src/vue/Main.js",
     node: {
         __dirname: false
     },
@@ -34,7 +34,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/renderer/public/Public.html"
+            template: "./src/vue/cache/render/Public.html"
         }),
         new VueLoaderPlugin(),
         new webpack.HotModuleReplacementPlugin()
