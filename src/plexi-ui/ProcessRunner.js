@@ -14,7 +14,7 @@ var ProcessRunner = /** @class */ (function () {
      */
     function ProcessRunner(plexiUi) {
         this.plexiUi = plexiUi;
-        this.processes = { 
+        this.processes = {
             vue: {
                 main: path_1.default.join(__dirname, "../vue/Main.js")
             },
@@ -47,11 +47,13 @@ var ProcessRunner = /** @class */ (function () {
                     }, 1000);
                     var updateResources = function () {
                         var _a;
-                        ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/cache/render"), function (error) { });
+                        ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/src/render"), function (error) {
+                            console.log(error);
+                        });
                     };
                     updateResources();
-                    var vueProcess_1 = child_process_1.exec("npx webpack serve --mode development --hot", {
-                        cwd: path_1.default.join(__dirname, "../../")
+                    var vueProcess_1 = child_process_1.exec("npm run serve", {
+                        cwd: path_1.default.join(__dirname, "../vue")
                     });
                     eventCallback({
                         type: "status",
@@ -63,7 +65,7 @@ var ProcessRunner = /** @class */ (function () {
                     });
                     (_a = vueProcess_1.stdout) === null || _a === void 0 ? void 0 : _a.on("data", function (data) {
                         if (!ready) {
-                            if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
+                            if (data == "No issues found.\n") {
                                 ready = true;
                                 clearInterval(timer_1);
                                 eventCallback({
@@ -123,7 +125,9 @@ var ProcessRunner = /** @class */ (function () {
                         });
                         var updateResources = function () {
                             var _a;
-                            ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/cache/render"), function (error) { });
+                            ncp_1.ncp((_a = _this.plexiUi.options) === null || _a === void 0 ? void 0 : _a.renderRoot, path_1.default.join(__dirname, "../vue/src/render"), function (error) {
+                                console.log(error);
+                            });
                         };
                         fileWatcher.on("add", function (path) {
                             updateResources();

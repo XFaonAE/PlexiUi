@@ -72,13 +72,14 @@ export default class ProcessRunner {
                     }, 1000);
 
                     const updateResources = () => {
-                        ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/cache/render"), (error: any) => {});
+                        ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/src/render"), (error: any) => {
+                            console.log(error);
+                        });
                     }
-
                     updateResources();
                         
-                    const vueProcess = exec("npx webpack serve --mode development --hot", {
-                        cwd: path.join(__dirname, "../../")
+                    const vueProcess = exec("npm run serve", {
+                        cwd: path.join(__dirname, "../vue")
                     });
                     eventCallback({
                         type: "status",
@@ -91,7 +92,7 @@ export default class ProcessRunner {
 
                     vueProcess.stdout?.on("data", (data: any) => {
                         if (!ready) {
-                            if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
+                            if (data == "No issues found.\n") {
                                 ready = true;
                                 clearInterval(timer);
                                 eventCallback({
@@ -155,7 +156,9 @@ export default class ProcessRunner {
                         });
 
                         const updateResources = () => {
-                            ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/cache/render"), (error: any) => {});
+                            ncp(this.plexiUi.options?.renderRoot, path.join(__dirname, "../vue/src/render"), (error: any) => {
+                                console.log(error);
+                            });
                         }
 
                         fileWatcher.on("add", (path: any) => {

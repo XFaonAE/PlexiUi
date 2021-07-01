@@ -20,7 +20,7 @@
     border-radius: 2px;
     transition-duration: @speed;
     min-width: 100px;
-
+ 
     span {
         color: @text;
         font-family: @fontMain;
