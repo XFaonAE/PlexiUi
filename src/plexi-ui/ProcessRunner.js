@@ -14,7 +14,7 @@ var ProcessRunner = /** @class */ (function () {
      */
     function ProcessRunner(plexiUi) {
         this.plexiUi = plexiUi;
-        this.processes = {
+        this.processes = { 
             vue: {
                 main: path_1.default.join(__dirname, "../vue/Main.js")
             },
@@ -62,7 +62,6 @@ var ProcessRunner = /** @class */ (function () {
                         }
                     });
                     (_a = vueProcess_1.stdout) === null || _a === void 0 ? void 0 : _a.on("data", function (data) {
-                        console.log(data);
                         if (!ready) {
                             if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
                                 ready = true;
