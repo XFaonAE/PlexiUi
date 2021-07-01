@@ -90,7 +90,6 @@ export default class ProcessRunner {
                     });
 
                     vueProcess.stdout?.on("data", (data: any) => {
-                        console.log(data)
                         if (!ready) {
                             if (data == "\x1B[34mi\x1B[39m \x1B[90m｢wdm｣\x1B[39m: Compiled successfully.\n") {
                                 ready = true;
