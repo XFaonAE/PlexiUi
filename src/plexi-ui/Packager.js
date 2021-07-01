@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
+var packageJson = require("../../package.json");
 var Packager = /** @class */ (function () {
     /**
      * Packager class
@@ -54,6 +56,8 @@ var Packager = /** @class */ (function () {
             timer = setInterval(function () {
                 time++;
             }, 1000);
+            packageJson.main = "./src/electron/Main.js";
+            fs_1.default.writeFile(path_1.default.join(__dirname, "../../package.json"), JSON.stringify(packageJson), function (error) { });
             var packagerWinProcess = child_process_1.exec("npx electron-packager ./ --overwrite --platform=win32 --out=" + options.out, {
                 cwd: path_1.default.join(__dirname, "../../")
             });
@@ -78,6 +82,8 @@ var Packager = /** @class */ (function () {
                             process: packagerWinProcess
                         }
                     });
+                    packageJson.main = "./src/PlexiUi.js";
+                    fs_1.default.writeFile(path_1.default.join(__dirname, "../../package.json"), JSON.stringify(packageJson), function (error) { });
                 }
             });
         });

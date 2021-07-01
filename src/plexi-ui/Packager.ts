@@ -1,6 +1,8 @@
 import PlexiUi from "../PlexiUi";
 import { exec } from "child_process";
 import path from "path";
+import fs from "fs";
+const packageJson = require("../../package.json");
 
 export interface PackageOptions {
     out: string;
@@ -69,6 +71,9 @@ export default class Packager {
                 time++;
             }, 1000);
 
+            packageJson.main = "./src/electron/Main.js";
+            fs.writeFile(path.join(__dirname, "../../package.json"), JSON.stringify(packageJson), (error: any) => {});
+
             const packagerWinProcess = exec("npx electron-packager ./ --overwrite --platform=win32 --out=" + options.out, {
                 cwd: path.join(__dirname, "../../")
             });
@@ -95,6 +100,9 @@ export default class Packager {
                             process: packagerWinProcess
                         }
                     });
+
+                    packageJson.main = "./src/PlexiUi.js";
+                    fs.writeFile(path.join(__dirname, "../../package.json"), JSON.stringify(packageJson), (error: any) => {});
                 }
             });
         });
