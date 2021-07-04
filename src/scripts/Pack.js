@@ -7,7 +7,7 @@ var PlexiUi_1 = __importDefault(require("../../plexiui/PlexiUi"));
 new /** @class */ (function () {
     function Dev() {
         var plexiUi = new PlexiUi_1.default();
-        plexiUi.tasks.dev();
+        plexiUi.tasks.pack();
     }
     return Dev;
 }());
