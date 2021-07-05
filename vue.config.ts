@@ -1,5 +1,5 @@
-"use strict";
-var path = require("path");
+const path = require("path");
+
 module.exports = {
     indexPath: path.join(__dirname, "./src/index.html"),
     pages: {
