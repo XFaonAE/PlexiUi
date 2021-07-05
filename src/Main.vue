@@ -73,7 +73,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 20px;
+    padding: 0 20px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
     
     .title {
         color: #fff;
@@ -83,6 +85,7 @@ body {
     
     div {
         margin-right: -20px;
+        -webkit-app-region: no-drag;
         
         button {
             border: none;
