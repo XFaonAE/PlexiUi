@@ -54,6 +54,13 @@ export default {
     src: url(https://fonts.gstatic.com/s/materialicons/v92/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
 
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300;
+    src: url("./fonts/Montserrat.ttf") format('woff2');
+}
+
 .icon {
     font-family: 'Material Icons',sans-serif;
     font-weight: normal;
@@ -72,16 +79,49 @@ export default {
 
 body {
     margin: 0;
-    background: #191919;
+    background: #101010;
 }
 * {
     box-sizing: border-box;
 }
 
+._accent {
+    color: #50ffab;
+}
+
+.welcome {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 30px);
+    flex-direction: column;
+    
+    h1 {
+        color: #fff;
+        font-weight: lighter;
+        font-family: Montserrat;
+        margin: 0px 0px 10px 0px;
+        width: 50vw;
+        border-bottom: 1px solid #202020;
+        display: flex;
+        justify-content: center;
+        font-size: 40px;
+        padding-bottom: 10px;
+    }
+
+    p {
+        font-size: 13px;
+        margin: 10px 0px 0px 0px;
+        font-family: Montserrat;
+        color: #fff;
+    }
+}
+
 ._header {
     width: 100vw;
     height: 30px;
-    background: #121212;
+    background: #050505;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -91,7 +131,7 @@ body {
     
     .title {
         color: #fff;
-        font-family: sans-serif;
+        font-family: Montserrat;
         font-size: 11px;
     }
     
@@ -111,7 +151,7 @@ body {
             
             &:hover {
                 opacity: 1;
-                background: #191919;
+                background: #101010;
             }
         }
     }
