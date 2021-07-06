@@ -9,8 +9,8 @@
                 <button @click="windowMinimize()">
                     <span class="icon">remove</span>
                 </button>
-    
-                <button @click="windowSize()"> 
+                
+                <button @click="windowSize()">
                     <span class="icon">check_box_outline_blank</span>
                 </button>
                 
@@ -19,16 +19,28 @@
                 </button>
             </div>
         </div>
+        <div class="app">
+            <div class="tabs">
+            
+            </div>
+            <div class="bar">
+                <form>
+                    <input placeholder="search" />
+                </form>
+            </div>
+            <webview src="https://github.com/AxeriDev/PlexiUi"></webview>
+        </div>
     </div>
 </template>
 
 <script>
 const { ipcRenderer } = window.require("electron");
+const $ = require("jquery");
 
 export default {
     data: () => {
         return {
-            title: "PlexiUi Application"
+            title: "Browser"
         };
     },
     methods: {
@@ -42,6 +54,25 @@ export default {
         windowMinimize() {
             ipcRenderer.send("windowMinimize");
         }
+    },
+    mounted() {
+        $("form").submit((event) => {
+            event.preventDefault();
+            
+            $("webview").attr("src", $("form input").val());
+        });
+        
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type == "attributes") {
+                    $("form input").val($("webview").attr("src"))
+                }
+            });
+        });
+        
+        observer.observe(document.querySelector("webview"), {
+            attributes: true
+        });
     }
 }
 </script>
@@ -52,6 +83,10 @@ export default {
     font-style: normal;
     font-weight: 400;
     src: url(https://fonts.gstatic.com/s/materialicons/v92/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.webview {
+    height: calc(100vh - 30px);
 }
 
 @font-face {
@@ -109,7 +144,7 @@ body {
         font-size: 40px;
         padding-bottom: 10px;
     }
-
+    
     p {
         font-size: 13px;
         margin: 10px 0px 0px 0px;
@@ -154,6 +189,34 @@ body {
                 background: #101010;
             }
         }
+    }
+}
+
+.app {
+    .tabs {
+        width: 100%;
+        height: 0px;
+        background: #191919;
+    }
+    
+    .bar {
+        background: #191919;
+        padding: 5px 20px;
+        
+        input {
+            width: 100%;
+            display: flex;
+            background: #191919;
+            border: 1px solid #252525;
+            padding: 6px 20px;
+            outline: none;
+            border-radius: 2px;
+            color: #fff;
+        }
+    }
+    
+    webview {
+        height: calc(100vh - 70px);
     }
 }
 </style>

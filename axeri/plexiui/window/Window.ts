@@ -1,10 +1,12 @@
+import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
+const isDev = require("electron-is-dev");
 
 new class Window {
     /**
-     * @var { BrowserWindow } window Window object
+     * @var { BrowserWindow | undefined } window Window object
      */
-    public window: BrowserWindow;
+    public window: BrowserWindow | undefined;
 
     /**
      * Window constructor
@@ -22,20 +24,35 @@ new class Window {
                 }
             });
 
-            this.window.loadURL("http://localhost:8080");
+            if (isDev) {
+                this.window.loadURL("http://localhost:8080").then(() => {
+                    this.attachIpc();
+                });
 
-            ipcMain.on("windowSize", (event: any, args: any) => {
-                if (this.window.isMaximized()) {
-                    this.window.restore();
-                    return;
-                }
+                return;
+            }
 
-                this.window.maximize();
+            this.window.loadFile(path.join(__dirname, "../renderer/build/index.html")).then(() => {
+                this.attachIpc();
             });
+        });
+    }
 
-            ipcMain.on("windowMinimize", (event: any, args: any) => {
-                this.window.minimize();
-            });
+    /**
+     * Attach IPC
+     */
+    public attachIpc() {
+        ipcMain.on("windowSize", (event: any, args: any) => {
+            if (this.window?.isMaximized()) {
+                this.window?.restore();
+                return;
+            }
+
+            this.window?.maximize();
+        });
+
+        ipcMain.on("windowMinimize", (event: any, args: any) => {
+            this.window?.minimize();
         });
     }
 }
