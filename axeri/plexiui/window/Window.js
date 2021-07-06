@@ -19,6 +19,16 @@ new /** @class */ (function () {
                 }
             });
             _this.window.loadURL("http://localhost:8080");
+            electron_1.ipcMain.on("windowSize", function (event, args) {
+                if (_this.window.isMaximized()) {
+                    _this.window.restore();
+                    return;
+                }
+                _this.window.maximize();
+            });
+            electron_1.ipcMain.on("windowMinimize", function (event, args) {
+                _this.window.minimize();
+            });
         });
     }
     return Window;

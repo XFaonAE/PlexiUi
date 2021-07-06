@@ -16,6 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var PlexiCore_1 = __importDefault(require("../plexicore/PlexiCore"));
+var Process_1 = __importDefault(require("./core/process/Process"));
 var PlexiUi = /** @class */ (function () {
     /**
      * PlexiUi entry
@@ -24,7 +25,11 @@ var PlexiUi = /** @class */ (function () {
         this.plexiCore = new PlexiCore_1.default();
         this.options = {
             windowMain: path_1.default.join(__dirname, "./window/Window.js"),
-            mode: "dev"
+            mode: "dev",
+            skip: {
+                renderer: false,
+                window: false
+            }
         };
     }
     /**
@@ -38,11 +43,50 @@ var PlexiUi = /** @class */ (function () {
      * Run framework
      */
     PlexiUi.prototype.run = function () {
-        var _this = this;
-        this.plexiCore.terminal.writeAnimation("Starting renderer...");
-        setTimeout(function () {
-            _this.plexiCore.terminal.endAnimation("success");
-        }, 1500);
+        var plexiCore = this.plexiCore;
+        var options = this.options;
+        var process = new Process_1.default();
+        var tasks = {
+            startRenderer: function (doneEvent) {
+                var _a;
+                if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.renderer) {
+                    plexiCore.terminal.done("warning", "Skipping renderer process");
+                    doneEvent();
+                }
+                else {
+                    plexiCore.terminal.writeAnimation("Starting renderer");
+                    process.run("renderer", function (event) {
+                        switch (event.status) {
+                            case "done":
+                                plexiCore.terminal.done("success", "Renderer started after " + event.after);
+                                doneEvent();
+                                break;
+                        }
+                    });
+                }
+            },
+            startWindow: function (doneEvent) {
+                var _a;
+                if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.window) {
+                    plexiCore.terminal.done("warning", "Skipping window process");
+                    doneEvent();
+                }
+                else {
+                    plexiCore.terminal.writeAnimation("Starting window");
+                    process.run("window", function (event) {
+                        switch (event.status) {
+                            case "done":
+                                plexiCore.terminal.done("success", "Window started after " + event.after);
+                                doneEvent();
+                                break;
+                        }
+                    });
+                }
+            }
+        };
+        tasks.startRenderer(function () {
+            tasks.startWindow(function () { });
+        });
     };
     return PlexiUi;
 }());

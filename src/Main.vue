@@ -6,33 +6,42 @@
             </span>
             
             <div>
-                <button>
+                <button @click="windowMinimize()">
                     <span class="icon">remove</span>
                 </button>
     
-                <button>
+                <button @click="windowSize()"> 
                     <span class="icon">check_box_outline_blank</span>
                 </button>
                 
-                <button>
+                <button @click="windowClose()">
                     <span class="icon">close</span>
                 </button>
             </div>
-        </div>
-        
-        <div class="welcome">
-            <h1>PlexiUi</h1>
-            <p>Welcome to <span class="_accent">PlexiUi</span> | By Axeri</p>
         </div>
     </div>
 </template>
 
 <script>
+const { ipcRenderer } = window.require("electron");
+
 export default {
     data: () => {
         return {
             title: "PlexiUi Application"
         };
+    },
+    methods: {
+        windowClose() {
+            window.close();
+        },
+        windowSize() {
+            ipcRenderer.send("windowSize");
+            
+        },
+        windowMinimize() {
+            ipcRenderer.send("windowMinimize");
+        }
     }
 }
 </script>
