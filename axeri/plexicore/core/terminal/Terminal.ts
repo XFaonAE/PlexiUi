@@ -14,13 +14,14 @@ export default class Terminal {
     /**
      * @var { string } lastMessage Last used message
      */
-    public lastMessage: string = "";
+    public lastMessage: string;
 
     /**
      * Terminal entry
      */
     public constructor() {
         this.frameInterval = 100;
+        this.lastMessage = "";
     }
 
     /**
@@ -51,11 +52,11 @@ export default class Terminal {
     }
 
     /**
-     * End animation with a status indicator
+     * Write a finished indicator with a status identifier
      * @param { "success" | "warning" | "alert" } status Status indicator
      * @param { string } newMessage New message
      */
-    public endAnimation(status: "success" | "warning" | "error", newMessage: string = "") {
+    public done(status: "success" | "warning" | "error", newMessage: string = "") {
         let hex = "#fff";
         switch (status) {
             case "success":
@@ -75,11 +76,20 @@ export default class Terminal {
             clearInterval(this.animator);
         }
 
-        let message = "";
-        if (newMessage) {
-            message = newMessage + " ".repeat(this.lastMessage.length - newMessage.length);
+        if (typeof this.lastMessage == undefined) {
+            this.lastMessage = "";
         }
 
-        process.stdout.write("\r" + chalk.hex(hex)("●") + " " + message + "\n");
+        let message = "";
+        if (newMessage) {
+            let overflow = this.lastMessage.length - newMessage.length;
+            if (overflow < 0) {
+                overflow = 0;
+            }
+
+            message = newMessage + " ".repeat(overflow);
+        }
+
+        process.stdout.write("\r" + chalk.hex(hex)("•") + " " + message + "\n");
     }
 }

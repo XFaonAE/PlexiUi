@@ -9,11 +9,8 @@ var Terminal = /** @class */ (function () {
      * Terminal entry
      */
     function Terminal() {
-        /**
-         * @var { string } lastMessage Last used message
-         */
-        this.lastMessage = "";
         this.frameInterval = 100;
+        this.lastMessage = "";
     }
     /**
      * Write a message with an animation
@@ -39,11 +36,11 @@ var Terminal = /** @class */ (function () {
         }, this.frameInterval);
     };
     /**
-     * End animation with a status indicator
+     * Write a finished indicator with a status identifier
      * @param { "success" | "warning" | "alert" } status Status indicator
      * @param { string } newMessage New message
      */
-    Terminal.prototype.endAnimation = function (status, newMessage) {
+    Terminal.prototype.done = function (status, newMessage) {
         if (newMessage === void 0) { newMessage = ""; }
         var hex = "#fff";
         switch (status) {
@@ -60,11 +57,18 @@ var Terminal = /** @class */ (function () {
         if (typeof this.animator !== "undefined") {
             clearInterval(this.animator);
         }
+        if (typeof this.lastMessage == undefined) {
+            this.lastMessage = "";
+        }
         var message = "";
         if (newMessage) {
-            message = newMessage + " ".repeat(this.lastMessage.length - newMessage.length);
+            var overflow = this.lastMessage.length - newMessage.length;
+            if (overflow < 0) {
+                overflow = 0;
+            }
+            message = newMessage + " ".repeat(overflow);
         }
-        process.stdout.write("\r" + chalk_1.default.hex(hex)("●") + " " + message + "\n");
+        process.stdout.write("\r" + chalk_1.default.hex(hex)("•") + " " + message + "\n");
     };
     return Terminal;
 }());

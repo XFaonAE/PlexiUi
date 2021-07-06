@@ -2,9 +2,9 @@ import { app, BrowserWindow, ipcMain } from "electron";
 
 new class Window {
     /**
-     * @var { BrowserWindow | undefined } window Window object
+     * @var { BrowserWindow } window Window object
      */
-    public window: BrowserWindow | undefined;
+    public window: BrowserWindow;
 
     /**
      * Window constructor
@@ -23,6 +23,19 @@ new class Window {
             });
 
             this.window.loadURL("http://localhost:8080");
+
+            ipcMain.on("windowSize", (event: any, args: any) => {
+                if (this.window.isMaximized()) {
+                    this.window.restore();
+                    return;
+                }
+
+                this.window.maximize();
+            });
+
+            ipcMain.on("windowMinimize", (event: any, args: any) => {
+                this.window.minimize();
+            });
         });
     }
 }
