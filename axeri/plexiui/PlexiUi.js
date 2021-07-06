@@ -45,48 +45,98 @@ var PlexiUi = /** @class */ (function () {
     PlexiUi.prototype.run = function () {
         var plexiCore = this.plexiCore;
         var options = this.options;
-        var process = new Process_1.default();
-        var tasks = {
-            startRenderer: function (doneEvent) {
-                var _a;
-                if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.renderer) {
-                    plexiCore.terminal.done("warning", "Skipping renderer process");
-                    doneEvent();
-                }
-                else {
-                    plexiCore.terminal.writeAnimation("Starting renderer");
-                    process.run("renderer", function (event) {
-                        switch (event.status) {
-                            case "done":
-                                plexiCore.terminal.done("success", "Renderer started after " + event.after);
+        var processRun = new Process_1.default();
+        switch (options.mode) {
+            case "dev":
+                (function () {
+                    var tasks = {
+                        startRenderer: function (doneEvent) {
+                            var _a;
+                            if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.renderer) {
+                                plexiCore.terminal.done("warning", "Skipping renderer process");
                                 doneEvent();
-                                break;
-                        }
-                    });
-                }
-            },
-            startWindow: function (doneEvent) {
-                var _a;
-                if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.window) {
-                    plexiCore.terminal.done("warning", "Skipping window process");
-                    doneEvent();
-                }
-                else {
-                    plexiCore.terminal.writeAnimation("Starting window");
-                    process.run("window", function (event) {
-                        switch (event.status) {
-                            case "done":
-                                plexiCore.terminal.done("success", "Window started after " + event.after);
+                                return;
+                            }
+                            plexiCore.terminal.writeAnimation("Starting renderer");
+                            processRun.run("renderer", function (event) {
+                                switch (event.status) {
+                                    case "done":
+                                        plexiCore.terminal.done("success", "Renderer started after " + event.after);
+                                        doneEvent();
+                                        break;
+                                }
+                            });
+                        },
+                        startWindow: function (doneEvent) {
+                            var _a;
+                            if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.window) {
+                                plexiCore.terminal.done("warning", "Skipping window process");
                                 doneEvent();
-                                break;
+                                return;
+                            }
+                            plexiCore.terminal.writeAnimation("Starting window");
+                            processRun.run("window", function (event) {
+                                switch (event.status) {
+                                    case "done":
+                                        plexiCore.terminal.done("success", "Window started after " + event.after);
+                                        doneEvent();
+                                        break;
+                                }
+                            });
                         }
+                    };
+                    tasks.startRenderer(function () {
+                        tasks.startWindow(function () {
+                        });
                     });
-                }
-            }
-        };
-        tasks.startRenderer(function () {
-            tasks.startWindow(function () { });
-        });
+                })();
+                break;
+            case "pack":
+                (function () {
+                    var tasks = {
+                        buildRenderer: function (doneEvent) {
+                            var _a;
+                            if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.renderer) {
+                                plexiCore.terminal.done("warning", "Skipping build for renderer");
+                                doneEvent();
+                                return;
+                            }
+                            plexiCore.terminal.writeAnimation("Building renderer content");
+                            processRun.run("packageRenderer", function (event) {
+                                switch (event.status) {
+                                    case "done":
+                                        plexiCore.terminal.done("success", "Finished building renderer content after " + event.after);
+                                        doneEvent();
+                                        break;
+                                }
+                            });
+                        },
+                        packageWindow: function (doneEvent) {
+                            var _a;
+                            if ((_a = options.skip) === null || _a === void 0 ? void 0 : _a.window) {
+                                plexiCore.terminal.done("warning", "Skipping packager for window");
+                                doneEvent();
+                                return;
+                            }
+                            plexiCore.terminal.writeAnimation("Building window for win32");
+                            processRun.run("packageWin32", function (event) {
+                                switch (event.status) {
+                                    case "done":
+                                        plexiCore.terminal.done("success", "Finished packaging window for win32 after " + event.after);
+                                        doneEvent();
+                                        break;
+                                }
+                            });
+                        }
+                    };
+                    tasks.buildRenderer(function () {
+                        tasks.packageWindow(function () {
+                            process.exit(0);
+                        });
+                    });
+                })();
+                break;
+        }
     };
     return PlexiUi;
 }());

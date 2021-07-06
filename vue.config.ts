@@ -1,7 +1,8 @@
 const path = require("path");
 
 module.exports = {
-    indexPath: path.join(__dirname, "./src/index.html"),
+    publicPath: process.env.NODE_ENV == "production" ? "./" : "/",
+    outputDir: path.join(__dirname, "./axeri/plexiui/renderer/build"),
     pages: {
         index: {
             entry: path.join(__dirname, "./axeri/plexiui/renderer/Renderer.js")
