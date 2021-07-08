@@ -26,6 +26,8 @@ export default {
     transition-duration: @speedOut;
     opacity: 0.6;
     color: @text;
+    border-left: 1px solid transparent;
+    padding-right: 1px;
     text-decoration: none;
 
     .icon {
@@ -39,7 +41,7 @@ export default {
     }
 
     &.router-link-active {
-        color: @accent;
+        border-color: @text;
         opacity: 1;
     }
 }

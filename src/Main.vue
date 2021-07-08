@@ -1,7 +1,9 @@
 <template>
     <div class="_root">
         <SideRail>
-            <SideRailButton href="/b" icon="fab fa-github" />
+            <SideRailButton href="/" icon="fal fa-home" />
+            
+            <SideRailButton href="/github" icon="fab fa-github" />
         </SideRail>
 
         <side-bar></side-bar>
@@ -51,5 +53,11 @@ body {
 }
 ._root {
     display: flex;
+}
+
+._view {
+    margin-top: 30px;
+    height: calc(100vh - 60px);
+    width: 100%;
 }
 </style>

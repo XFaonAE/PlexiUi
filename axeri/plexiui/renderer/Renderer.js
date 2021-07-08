@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var vue_1 = require("vue");
 var Main_vue_1 = __importDefault(require("../../../src/Main.vue"));
 var vue_router_1 = require("vue-router");
+var GitHub_vue_1 = __importDefault(require("../../../src/views/GitHub.vue"));
 var config = require("../../../config.json");
 var electron = window.require("electron");
 var packageJson = require("../../../package.json");
@@ -16,8 +17,12 @@ var router = vue_router_1.createRouter({
         {
             path: "/",
             component: {
-                template: ""
+                template: GitHub_vue_1.default
             }
+        },
+        {
+            path: "/github",
+            component: GitHub_vue_1.default
         }
     ]
 });
