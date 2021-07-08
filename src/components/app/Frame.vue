@@ -1,7 +1,7 @@
 <template>
     <div class="Frame">
         <span class="title">
-            {{ title }}
+            {{ appTitle }}
         </span>
 
         <div class="buttons">
@@ -13,7 +13,7 @@
                 <i class="fal fa-square"></i>
             </button>
 
-            <button @click="closeWin">
+            <button class="close" @click="closeWin">
                 <i class="fal fa-times"></i>
             </button>
         </div>
@@ -22,9 +22,11 @@
 
 <script>
 export default {
-    props: [
-        "title"
-    ],
+    data: () => {
+        return {
+            appTitle: ""
+        };
+    },
     methods: {
         sizeWin() {
             this.$window.ipcRenderer.send("windowSize");
@@ -34,6 +36,9 @@ export default {
         },
         minimizeWin() {
             this.$window.ipcRenderer.send("windowMinimize");
+        },
+        setTitle(title) {
+            this.appTitle = title;
         }
     }
 }
@@ -80,6 +85,11 @@ export default {
             opacity: 1;
             background: @layer1;
             transition-duration: @speedIn;
+
+            &.close {
+                background: @accent;
+                color: @layer0;
+            }
         }
     }
 }

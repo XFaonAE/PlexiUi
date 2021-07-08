@@ -9,6 +9,7 @@
 
 .SideRail {
     width: 50px;
+    min-width: 50px;
     height: calc(100vh - 60px);
     margin-top: 30px;
     background: @layer1;
