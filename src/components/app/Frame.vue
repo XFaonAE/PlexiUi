@@ -50,13 +50,10 @@ export default {
 .Frame {
     width: 100vw;
     height: 30px;
-    position: fixed;
-    top: 0;
     background: @layer0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    left: 0;
     -webkit-app-region: drag;
 
     .title {

@@ -1,23 +1,27 @@
 <template>
     <div class="_root">
-        <SideRail>
-            <SideRailButton href="/" icon="fal fa-home" />
-            
-            <SideRailButton href="/github" icon="fab fa-github" />
-        </SideRail>
-
-        <side-bar></side-bar>
-
         <Frame ref="_Frame" :title="$config.title" />
+
+        <div class="app loading">
+            <SideRail>
+                <SideRailButton href="/" icon="fal fa-home" />
+                
+                <SideRailButton href="/github" icon="fab fa-github" />
+            </SideRail>
+            <side-bar></side-bar>
+            
+            <RouterView></RouterView>
+        </div>
+
         <Gutter>
             <GutterButton @click="plexiuiGutterClick">PlexiUI {{ $package.version }}</GutterButton>
         </Gutter>
-
-        <RouterView></RouterView>
+        <PreLoader />
     </div>
 </template>
 
 <script>
+import PreLoader from './components/app/PreLoader.vue'
 import SideRailButton from './components/app/SideRailButton.vue'
 import GutterButton from './components/app/GutterButton.vue'
 import SideRail from "./components/app/SideRail";
@@ -31,7 +35,9 @@ export default {
         SideBar,
         Frame,
         Gutter,
-        GutterButton, SideRailButton
+        GutterButton, 
+        SideRailButton, 
+        PreLoader
     },
     methods: {
         plexiuiGutterClick() {
@@ -66,6 +72,20 @@ body {
 }
 ._root {
     display: flex;
+    flex-direction: column;
+
+    .app {
+        width: 100vw;
+        height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: row;
+        transition-duration: @speedOut;
+        transition-delay: 2s;
+
+        &.loading {
+            transform: scale(0.9);
+        }
+    }
 }
 
 ._view {

@@ -8,13 +8,10 @@
 @import "../Config";
 
 .Gutter {
-    width: 100vw;
+    width: 100%;
     height: 30px;
-    position: fixed;
-    bottom: 0;
     background: @layer0;
     display: flex;
     align-items: center;
-    left: 0;
 }
 </style>
