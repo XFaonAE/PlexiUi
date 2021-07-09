@@ -29,6 +29,7 @@ export default {
     border-left: 1px solid transparent;
     padding-right: 1px;
     text-decoration: none;
+    overflow: hidden;
 
     .icon {
         font-size: 20px;
@@ -41,8 +42,8 @@ export default {
     }
 
     &.router-link-active {
-        border-color: @accent;
-        color: @accent;
+        border-color: @text;
+        color: @text;
         opacity: 1;
     }
 }

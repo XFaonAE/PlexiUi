@@ -1,6 +1,7 @@
 <template>
     <div class="_view">
-        <MarkDown md="## Welcome\n Welcome to the homepage of your application!" />
+        <h1 class="logo">PlexiUI</h1>
+        <MarkDown md="# \nWelcome to the homepage of your application!" />
     </div>
 </template>
 
@@ -19,5 +20,12 @@ export default {
 
 ._view {
   padding: 20px;
+}
+
+.logo {
+    font-family: @fontLogo;
+    color: @accent;
+    letter-spacing: 10px;
+    margin: 0 0 10px 0;
 }
 </style>
