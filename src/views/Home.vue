@@ -1,6 +1,6 @@
 <template>
     <div class="_view">
-        <MarkDown md="## GitHub\nVisit the **GitHub** page for this repository [AxeriDev/PlexiUi](https://github.com/AxeriDev/PlexiUi)" />
+        <MarkDown md="## Welcome\n Welcome to the homepage of your application!" />
     </div>
 </template>
 
