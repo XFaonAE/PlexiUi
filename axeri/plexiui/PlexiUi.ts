@@ -1,5 +1,6 @@
 import path from "path";
 import PlexiCore from "../plexicore/PlexiCore";
+import CommandHelper from "./core/commandHelper/CommandHelper";
 import Process from "./core/process/Process";
 
 export interface RunOptions {
@@ -66,12 +67,16 @@ export default class PlexiUi {
         const plexiCore = this.plexiCore;
         const options = this.options;
         const processRun = new Process();
+        let meta: {
+            window?: any,
+            renderer?: any
+        } = {};
 
         switch (options.mode) {
             case "dev":
                 (() => {
                     const tasks = {
-                        startRenderer(doneEvent: CallableFunction) {
+                        startRenderer: (doneEvent: CallableFunction) => {
                             if (options.skip?.renderer) {
                                 plexiCore.terminal.done("warning", "Skipping renderer process");
                                 doneEvent();
@@ -83,6 +88,13 @@ export default class PlexiUi {
                                 switch (event.status) {
                                     case "done":
                                         plexiCore.terminal.done("success", "Renderer started after " + event.after);
+                                        meta = {
+                                            ...meta,
+                                            renderer: {
+                                                lastEvent: event
+                                            }
+                                        };
+
                                         doneEvent();
                                         break;
                                     
@@ -92,7 +104,7 @@ export default class PlexiUi {
                                 }
                             });
                         },
-                        startWindow(doneEvent: CallableFunction) {
+                        startWindow: (doneEvent: CallableFunction) => {
                             if (options.skip?.window) {
                                 plexiCore.terminal.done("warning", "Skipping window process");
                                 doneEvent();
@@ -104,15 +116,26 @@ export default class PlexiUi {
                                 switch (event.status) {
                                     case "done":
                                         plexiCore.terminal.done("success", "Window started after " + event.after);
+                                        meta = {
+                                            ...meta,
+                                            window: {
+                                                lastEvent: event
+                                            }
+                                        };
+
                                         doneEvent();
                                         break;
                                 }
                             });
+                        },
+                        registerCli: () => {
+                            const commandHelper = new CommandHelper(this, meta);
                         }
                     };
 
                     tasks.startRenderer(() => {
                         tasks.startWindow(() => {
+                            tasks.registerCli();
                         });
                     });
                 })();
@@ -121,7 +144,7 @@ export default class PlexiUi {
             case "pack":
                 (() => {
                     const tasks = {
-                        buildRenderer(doneEvent: CallableFunction) {
+                        buildRenderer: (doneEvent: CallableFunction) => {
                             if (options.skip?.renderer) {
                                 plexiCore.terminal.done("warning", "Skipping build for renderer");
                                 doneEvent();
@@ -138,7 +161,7 @@ export default class PlexiUi {
                                 }
                             });
                         },
-                        packageWindow(doneEvent: CallableFunction) {
+                        packageWindow: (doneEvent: CallableFunction) => {
                             if (options.skip?.window) {
                                 plexiCore.terminal.done("warning", "Skipping packager for window");
                                 doneEvent();

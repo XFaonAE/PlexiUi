@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import Helper from "./Helper";
 
 export default class Terminal {
     /**
@@ -17,11 +18,17 @@ export default class Terminal {
     public lastMessage: string;
 
     /**
+     * @var { Helper } helper Helper class object
+     */
+    public helper: Helper;
+
+    /**
      * Terminal entry
      */
     public constructor() {
         this.frameInterval = 100;
         this.lastMessage = "";
+        this.helper = new Helper(this);
     }
 
     /**
@@ -88,6 +95,8 @@ export default class Terminal {
             }
 
             message = newMessage + " ".repeat(overflow);
+        } else {
+            message = this.lastMessage;
         }
 
         process.stdout.write("\r" + chalk.hex(hex)("•") + " " + message + "\n");
