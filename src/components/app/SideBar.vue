@@ -14,7 +14,9 @@
     width: 270px;
     min-width: 270px;
     height: 100%;
+    transition-duration: @speedOut;
     background: @layer0;
+    overflow: hidden;
 
     .header {
         width: 100%;
@@ -26,6 +28,16 @@
         font-size: 11px;
         font-family: @fontMain;
         padding: 0px 20px;
+    }
+
+    @media (max-width: 1000px) {
+        left: calc(-270px + 50px);
+        z-index: 2;
+        position: fixed;
+    }
+
+    &.forceOpen {
+        left: 50px;
     }
 }
 </style>
