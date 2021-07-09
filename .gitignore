@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+axeri/plexiui/renderer/build
 
 
 # local env files
