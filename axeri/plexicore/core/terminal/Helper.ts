@@ -29,6 +29,20 @@ export default class Helper {
     }
 
     /**
+     * Register a command
+     * @param { { 
+     *     keyword: string, 
+     *     run: CallableFunction 
+     * } } commandObject Command object
+     */
+    public registerCommand(commandObject: {
+        keyword: string,
+        run: CallableFunction
+    }) {
+        this.commandRegister.push(commandObject);
+    }
+
+    /**
      * Start command listener
      */
     public startListener() {
