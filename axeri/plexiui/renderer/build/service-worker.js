@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.34b0a59370d3ca127d0472e32beed0bd.js"
+  "precache-manifest.fcc83822d8e3a41c516d103412452602.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "plexi-ui"});

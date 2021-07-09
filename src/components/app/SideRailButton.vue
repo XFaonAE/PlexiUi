@@ -41,7 +41,8 @@ export default {
     }
 
     &.router-link-active {
-        border-color: @text;
+        border-color: @accent;
+        color: @accent;
         opacity: 1;
     }
 }

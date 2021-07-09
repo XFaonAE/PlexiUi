@@ -1,23 +1,68 @@
 <template>
-    <div class="MarkDown">
-        <slot />
-    </div>
+    <div class="MarkDown"></div>
 </template>
+
+<script>
+import marked from "marked";
+import $ from "jquery";
+import hljs from "highlight.js";
+
+export default {
+    props: [
+        "file"
+    ],
+    mounted() {
+        let markdown = "## Welcome \n ```js\n console.log('Hello, world!'); \n```\n - Coffee\n - Programming\n - Gaming\n - [Axeri](https://axeri.net)"
+
+        $(this.$el).html(marked(markdown));
+        hljs.highlightAll();
+    }
+}
+</script>
 
 <style lang="less">
 @import "../Config";
 
 .MarkDown {
+    user-select: text;
+
+    @string: fade(@accent, 70%);
+
+    .hljs-keyword {
+        color: #50ffff;
+    }
+
+    .hljs-variable {
+        color: #888888;
+    }
+
+    .hljs-title {
+        color: @text;
+
+        &.function_ {
+            color: @accent;
+        } 
+
+        &.class_ {
+            color: @accent;
+        }
+    }
+
+    .hljs-string {
+        color: @string;
+    }
+
     h1, h2, h3, h4, h5, h6 {
         color: @text;
         font-family: @fontMain;
         font-weight: lighter;
+        margin: 0 0 20px 0;
+        word-break: break-word;
     }
 
     h1, h2, h3 {
         border-bottom: 1px solid fade(@text, 10%);
         padding-bottom: 20px;
-        margin: 30px 0px 5px 0px;
     }
 
     h4, h5, h6 {
@@ -73,13 +118,13 @@
         font-family: @fontMain;
         padding: 3px 5px;
         margin: 0 3px;
-        background: @layer0;
+        background: @layer2;
         border-radius: 2px;
     }
 
     pre {
         color: @text;
-        background: @layer0;
+        background: @layer2;
         padding: 10px;
         border-radius: 4px;
         max-width: 100%;

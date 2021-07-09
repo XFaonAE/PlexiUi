@@ -1,37 +1,39 @@
 <template>
     <div class="_root">
-        <SideRail>
-            <SideRailButton href="/" icon="fal fa-home" />
-            
-            <SideRailButton href="/github" icon="fab fa-github" />
-        </SideRail>
-
-        <side-bar></side-bar>
-
         <Frame ref="_Frame" :title="$config.title" />
-        <Gutter>
-            <GutterButton @click="plexiuiGutterClick">PlexiUI {{ $package.version }}</GutterButton>
-        </Gutter>
 
-        <RouterView></RouterView>
+        <div class="app loading">
+            <SideRail>
+                <SideRailButton href="/" icon="fal fa-home" />
+                
+                <SideRailButton href="/github" icon="fab fa-github" />
+            </SideRail>
+            <side-bar>
+                <SideBarLinks></SideBarLinks>
+            </side-bar>
+            
+            <RouterView></RouterView>
+        </div>
+        <PreLoader />
     </div>
 </template>
 
 <script>
+import SideBarLinks from './components/app/SideBarLinks.vue'
+import PreLoader from './components/app/PreLoader.vue'
 import SideRailButton from './components/app/SideRailButton.vue'
-import GutterButton from './components/app/GutterButton.vue'
 import SideRail from "./components/app/SideRail";
 import SideBar from "./components/app/SideBar";
 import Frame from "./components/app/Frame";
-import Gutter from "./components/app/Gutter";
 
 export default {
     components: {
         SideRail,
         SideBar,
         Frame,
-        Gutter,
-        GutterButton, SideRailButton
+        SideRailButton, 
+        PreLoader, 
+        SideBarLinks
     },
     methods: {
         plexiuiGutterClick() {
@@ -66,16 +68,35 @@ body {
 }
 ._root {
     display: flex;
+    flex-direction: column;
+    user-select: none;
+
+    .app {
+        width: 100vw;
+        height: calc(100vh - 30px);
+        display: flex;
+        flex-direction: row;
+        transition-duration: @speedOut;
+
+        &.loading {
+            transform: scale(0.95);
+        }
+    }
 }
 
 ._view {
-    margin-top: 30px;
-    height: calc(100vh - 60px);
-    max-height: calc(100vh - 60px);
+    height: calc(100vh - 30px);
+    max-height: calc(100vh - 30px);
     overflow: auto;
     width: 100%;
+}
 
-    &::-webkit-scrollbar {
+::selection {
+    background: @accent;
+    color: @layer0;
+}
+
+&::-webkit-scrollbar {
         width: 3px;
         height: 3px;
     }
@@ -87,10 +108,4 @@ body {
     &::-webkit-scrollbar-thumb {
         background: @accent;
     }
-}
-
-::selection {
-    background: @accent;
-    color: @layer0;
-}
 </style>
