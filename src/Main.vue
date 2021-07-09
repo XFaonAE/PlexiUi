@@ -9,7 +9,18 @@
                 <SideRailButton href="/github" icon="fab fa-github" />
             </SideRail>
             <side-bar>
-                <SideBarLinks></SideBarLinks>
+                <SideBarLinks :links="[
+                    {
+                        label: 'Home',
+                        href: '/',
+                        icon: 'fal fa-home'
+                    },
+                    {
+                        label: 'GitHub',
+                        href: '/github',
+                        icon: 'fab fa-github'
+                    }
+                ]"></SideBarLinks>
             </side-bar>
             
             <RouterView></RouterView>
@@ -25,6 +36,7 @@ import SideRailButton from './components/app/SideRailButton.vue'
 import SideRail from "./components/app/SideRail";
 import SideBar from "./components/app/SideBar";
 import Frame from "./components/app/Frame";
+import $ from "jquery";
 
 export default {
     components: {
@@ -51,6 +63,13 @@ export default {
 
             this.$refs._Frame.setTitle(title);
             document.title = title;
+
+            setTimeout(() => {
+                $(this.$el).find("._view").addClass("slideDown");
+                setTimeout(() => {
+                    $(this.$el).find("._view").removeClass("slideDown");
+                }, 10);
+            }, 1);
         }
     } 
 }
@@ -76,7 +95,6 @@ body {
         height: calc(100vh - 30px);
         display: flex;
         flex-direction: row;
-        transition-duration: @speedOut;
 
         &.loading {
             transform: scale(0.95);
@@ -89,6 +107,13 @@ body {
     max-height: calc(100vh - 30px);
     overflow: auto;
     width: 100%;
+    transition-duration: @speedOut;
+
+    &.slideDown {
+        height: calc(100vh - 30px - 50px);
+        margin-top: 50px;
+        transition-duration: 0ms;
+    }
 }
 
 ::selection {

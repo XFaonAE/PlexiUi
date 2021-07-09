@@ -3,6 +3,7 @@ import Vue from "vue";
 import App from "../../../src/Main.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import GitHub from "../../../src/views/GitHub.vue";
+import Home from "../../../src/views/Home.vue";
 const config = require("../../../config.json");
 const electron = window.require("electron");
 const packageJson = require("../../../package.json");
@@ -13,9 +14,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      component: {
-        template: GitHub
-      }
+      component: Home
     },
     {
       path: "/github",

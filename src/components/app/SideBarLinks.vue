@@ -1,24 +1,22 @@
 <template>
     <div class="SideBarLinks">
-        <RouterLink to="/">
-            <i class="fal fa-home"></i>
+        <RouterLink :to="link.href" v-for="link in links">
+            <i :class="link.icon"></i>
 
-            <span>Home Page</span>
-        </RouterLink>
-
-        <RouterLink to="/asdas">
-            <i class="fal fa-home"></i>
-
-            <span>Home Page</span>
-        </RouterLink>
-
-        <RouterLink to="/sadasdasd">
-            <i class="fal fa-home"></i>
-
-            <span>Home Page</span>
+            <span>
+                {{ link.label }}
+            </span>
         </RouterLink>
     </div>
 </template>
+
+<script>
+export default {
+    props: [
+        "links"
+    ]
+}
+</script>
 
 <style lang="less">
 @import "../Config";

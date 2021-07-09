@@ -9,12 +9,12 @@ import hljs from "highlight.js";
 
 export default {
     props: [
-        "file"
+        "md"
     ],
     mounted() {
-        let markdown = "## Welcome \n ```js\n console.log('Hello, world!'); \n```\n - Coffee\n - Programming\n - Gaming\n - [Axeri](https://axeri.net)"
+        let markdown = this.md.replace(/\\n/g, "\n");
 
-        $(this.$el).html(marked(markdown));
+        $(this.$el).html(marked(this.md ? markdown : "## No markdown provided"));
         hljs.highlightAll();
     }
 }
