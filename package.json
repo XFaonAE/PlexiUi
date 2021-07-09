@@ -10,7 +10,8 @@
     "window:dev": "electron .",
     "app:dev": "node ./src/Main.js",
     "app:pack": "node ./src/scripts/Package.js",
-    "app:install": "npm install && tsc --watch"
+    "app:install": "npm install && tsc --watch",
+    "dev:compiler": "tsc --watch"
   },
   "dependencies": {
     "chalk": "^2.4.2",

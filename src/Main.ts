@@ -1,6 +1,11 @@
 import PlexiUi from "../axeri/plexiui/PlexiUi";
 
 const plexiUi = new PlexiUi();
-plexiUi.setOptions({});
+plexiUi.setOptions({
+    skip: {
+        renderer: true,
+        window: true
+    }
+});
 
 plexiUi.run();
