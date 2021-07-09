@@ -29,10 +29,9 @@ export default {
     align-items: center;
     transition-duration: @speedOut;
     opacity: 0;
-    transition-delay: 2s;
     justify-content: center;
     pointer-events: none;
-    transform: scale(0.9);
+    transform: scale(0.95);
     bottom: 0;
     left: 0;
 

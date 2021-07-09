@@ -8,10 +8,7 @@ new /** @class */ (function () {
     function Package() {
         var plexiUi = new PlexiUi_1.default();
         plexiUi.setOptions({
-            mode: "pack",
-            skip: {
-                renderer: true
-            }
+            mode: "pack"
         });
         plexiUi.run();
     }

@@ -64,6 +64,9 @@ var PlexiUi = /** @class */ (function () {
                                         plexiCore.terminal.done("success", "Renderer started after " + event.after);
                                         doneEvent();
                                         break;
+                                    case "progress":
+                                        plexiCore.terminal.lastMessage = "Starting renderer | " + event.percent;
+                                        break;
                                 }
                             });
                         },

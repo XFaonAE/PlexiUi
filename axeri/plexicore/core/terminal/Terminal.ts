@@ -34,10 +34,10 @@ export default class Terminal {
         }
 
         const frames = [
-            chalk.hex("#50ffab")("|"),
-            chalk.hex("#50ffab")("/"),
-            chalk.hex("#50ffab")("─"),
-            chalk.hex("#50ffab")("\\")
+            chalk.hex("#50ffff")("|"),
+            chalk.hex("#50ffff")("/"),
+            chalk.hex("#50ffff")("─"),
+            chalk.hex("#50ffff")("\\")
         ];
 
         let frame = 0;
@@ -46,7 +46,7 @@ export default class Terminal {
                 frame = 0;
             }
 
-            process.stdout.write("\r" + frames[frame] + " " + message);
+            process.stdout.write("\r" + frames[frame] + " " + this.lastMessage);
             frame++;
         }, this.frameInterval);
     }
@@ -60,7 +60,7 @@ export default class Terminal {
         let hex = "#fff";
         switch (status) {
             case "success":
-                hex = "#50ffab";
+                hex = "#50ffff";
                 break;
 
             case "warning":

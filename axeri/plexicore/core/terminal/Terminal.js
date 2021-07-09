@@ -16,22 +16,23 @@ var Terminal = /** @class */ (function () {
      * Write a message with an animation
      */
     Terminal.prototype.writeAnimation = function (message) {
+        var _this = this;
         this.lastMessage = message;
         if (typeof this.animator !== "undefined") {
             clearInterval(this.animator);
         }
         var frames = [
-            chalk_1.default.hex("#50ffab")("|"),
-            chalk_1.default.hex("#50ffab")("/"),
-            chalk_1.default.hex("#50ffab")("─"),
-            chalk_1.default.hex("#50ffab")("\\")
+            chalk_1.default.hex("#50ffff")("|"),
+            chalk_1.default.hex("#50ffff")("/"),
+            chalk_1.default.hex("#50ffff")("─"),
+            chalk_1.default.hex("#50ffff")("\\")
         ];
         var frame = 0;
         this.animator = setInterval(function () {
             if (frame > frames.length - 1) {
                 frame = 0;
             }
-            process.stdout.write("\r" + frames[frame] + " " + message);
+            process.stdout.write("\r" + frames[frame] + " " + _this.lastMessage);
             frame++;
         }, this.frameInterval);
     };
@@ -45,7 +46,7 @@ var Terminal = /** @class */ (function () {
         var hex = "#fff";
         switch (status) {
             case "success":
-                hex = "#50ffab";
+                hex = "#50ffff";
                 break;
             case "warning":
                 hex = "#ffff55";

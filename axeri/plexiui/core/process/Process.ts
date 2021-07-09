@@ -1,5 +1,6 @@
-import { exec } from "child_process";
+import { exec, spawn } from "child_process";
 import path from "path";
+import electron from "electron";
 
 export default class Process {
     /**
@@ -35,12 +36,20 @@ export default class Process {
                         }
                     }
                 });
+
+                renderer.stderr?.on("data", (data: string) => {
+                    eventCallback({
+                        status: "progress",
+                        percent: (data.match(/<s> \[webpack.Progress\] (.+?) (.??)/)?.[1]),
+                        time: time
+                    });
+                });
                 break;
 
             case "window":
-                const window = exec("npx electron ./", {
-                    cwd: path.join(__dirname, "../../../../")
-                });
+                const window = spawn(<string><unknown>electron, [
+                    "./"
+                ]);
                 ready = false;
 
                 window.stdout?.on("data", (data: string) => {

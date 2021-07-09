@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var path_1 = __importDefault(require("path"));
+var electron_1 = __importDefault(require("electron"));
 var Process = /** @class */ (function () {
     function Process() {
     }
@@ -14,7 +15,7 @@ var Process = /** @class */ (function () {
      * @param { CallableFunction } eventCallback Callback for all events
      */
     Process.prototype.run = function (processName, eventCallback) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d, _e, _f;
         var time = 0;
         var timer = setInterval(function () {
             time++;
@@ -39,13 +40,21 @@ var Process = /** @class */ (function () {
                         }
                     }
                 });
+                (_b = renderer_1.stderr) === null || _b === void 0 ? void 0 : _b.on("data", function (data) {
+                    var _a;
+                    eventCallback({
+                        status: "progress",
+                        percent: ((_a = data.match(/<s> \[webpack.Progress\] (.+?) (.??)/)) === null || _a === void 0 ? void 0 : _a[1]),
+                        time: time
+                    });
+                });
                 break;
             case "window":
-                var window_1 = child_process_1.exec("npx electron ./", {
-                    cwd: path_1.default.join(__dirname, "../../../../")
-                });
+                var window_1 = child_process_1.spawn(electron_1.default, [
+                    "./"
+                ]);
                 ready = false;
-                (_b = window_1.stdout) === null || _b === void 0 ? void 0 : _b.on("data", function (data) {
+                (_c = window_1.stdout) === null || _c === void 0 ? void 0 : _c.on("data", function (data) {
                     if (!ready) {
                         ready = true;
                         clearInterval(timer);
@@ -62,7 +71,7 @@ var Process = /** @class */ (function () {
                     cwd: path_1.default.join(__dirname, "../../../../")
                 });
                 ready = false;
-                (_c = rendererPackager_1.stdout) === null || _c === void 0 ? void 0 : _c.on("data", function (data) {
+                (_d = rendererPackager_1.stdout) === null || _d === void 0 ? void 0 : _d.on("data", function (data) {
                     if (!ready) {
                         if (data.startsWith(" DONE")) {
                             ready = true;
@@ -81,7 +90,7 @@ var Process = /** @class */ (function () {
                     cwd: path_1.default.join(__dirname, "../../../../")
                 });
                 ready = false;
-                (_d = win32Packager_1.stdout) === null || _d === void 0 ? void 0 : _d.on("data", function (data) {
+                (_e = win32Packager_1.stdout) === null || _e === void 0 ? void 0 : _e.on("data", function (data) {
                     if (!ready) {
                         if (data.startsWith("building block map")) {
                             ready = true;
@@ -94,7 +103,7 @@ var Process = /** @class */ (function () {
                         }
                     }
                 });
-                (_e = win32Packager_1.stderr) === null || _e === void 0 ? void 0 : _e.on("data", function (data) {
+                (_f = win32Packager_1.stderr) === null || _f === void 0 ? void 0 : _f.on("data", function (data) {
                     console.log(data);
                 });
                 break;
