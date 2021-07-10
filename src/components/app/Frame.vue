@@ -1,7 +1,5 @@
 <template>
     <div class="Frame">
-        <img class="logo" src="../../assets/Logo.svg" />
-
         <span class="title">
             {{ appTitle }}
         </span>
@@ -57,9 +55,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     -webkit-app-region: drag;
-
-    .logo {
-    }
 
     .title {
         color: @text;
