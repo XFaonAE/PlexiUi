@@ -84,6 +84,8 @@ body {
 }
 * {
     box-sizing: border-box;
+    outline: none;
+    font-family: @fontMain;
 }
 ._root {
     display: flex;
@@ -110,8 +112,8 @@ body {
     transition-duration: @speedOut;
 
     &.slideDown {
-        height: calc(100vh - 30px - 50px);
-        margin-top: 50px;
+        height: calc(100vh - 30px - 100px);
+        margin-top: 100px;
         transition-duration: 0ms;
     }
 }

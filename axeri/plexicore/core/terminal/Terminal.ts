@@ -26,7 +26,7 @@ export default class Terminal {
      * Terminal entry
      */
     public constructor() {
-        this.frameInterval = 100;
+        this.frameInterval = 70;
         this.lastMessage = "";
         this.helper = new Helper(this);
     }
@@ -41,10 +41,16 @@ export default class Terminal {
         }
 
         const frames = [
-            chalk.hex("#50ffff")("|"),
-            chalk.hex("#50ffff")("/"),
-            chalk.hex("#50ffff")("─"),
-            chalk.hex("#50ffff")("\\")
+            chalk.hex("#50ffab")("⠋"),
+            chalk.hex("#50ffff")("⠙"),
+            chalk.hex("#50ffff")("⠹"),
+            chalk.hex("#50ffff")("⠸"),
+            chalk.hex("#50ffff")("⠼"),
+            chalk.hex("#50ffff")("⠴"),
+            chalk.hex("#50ffff")("⠦"),
+            chalk.hex("#50ffff")("⠧"),
+            chalk.hex("#50ffff")("⠇"),
+            chalk.hex("#50ffff")("⠏")
         ];
 
         let frame = 0;

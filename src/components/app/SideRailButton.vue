@@ -26,8 +26,8 @@ export default {
     transition-duration: @speedOut;
     opacity: 0.6;
     color: @text;
-    border-left: 1px solid transparent;
-    padding-right: 1px;
+    border-left: 2px solid transparent;
+    padding-right: 2px;
     text-decoration: none;
     overflow: hidden;
 

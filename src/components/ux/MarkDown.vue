@@ -62,7 +62,7 @@ export default {
 
     h1, h2, h3 {
         border-bottom: 1px solid fade(@text, 10%);
-        padding-bottom: 20px;
+        padding-bottom: 15px;
     }
 
     h4, h5, h6 {
