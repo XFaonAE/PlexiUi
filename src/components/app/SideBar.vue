@@ -7,6 +7,18 @@
     </div>
 </template>
 
+<script>
+import $ from "jquery";
+
+export default {
+    watch: {
+        $route(to, from) {
+            $(this.$el).removeClass("forceOpen");
+        }
+    }
+}
+</script>
+
 <style lang="less" scoped>
 @import "../Config";
 
