@@ -31,12 +31,12 @@ var InitCommand = /** @class */ (function () {
      * @param { CommandHelper } commandHelper CommandHelper class object
      */
     function InitCommand(commandHelper) {
-        commandHelper
-            .addCommand({
+        commandHelper.addCommand({
             trigger: "init",
             desc: "Initialize a new PlexiUi project",
             onTrigger: function (args) {
                 var plexiCoreTerminal = new plexi_core_terminal_1.default();
+                plexiCoreTerminal.section("PlexiUI | Initialize Project");
                 var initProject = {
                     packageJson: {
                         main: "./src/electron/Electron.js",
@@ -56,7 +56,6 @@ var InitCommand = /** @class */ (function () {
                             "vue": "^3.0.0",
                             "vue-router": "^4.0.0-0",
                             "vuex": "^4.0.0-0",
-                            "electron": "^13.1.7",
                             "electron-is-dev": "^2.0.0"
                         },
                         devDependencies: {
@@ -64,8 +63,13 @@ var InitCommand = /** @class */ (function () {
                             "@vue/cli-plugin-router": "~4.5.0",
                             "@vue/cli-plugin-vuex": "~4.5.0",
                             "@vue/cli-service": "~4.5.0",
+                            "electron": "^13.1.7",
+                            "electron-builder": "^22.11.7",
                             "@vue/compiler-sfc": "^3.0.0"
-                        }
+                        },
+                        "files": [
+                            "./dist/html"
+                        ]
                     }
                 };
                 var getProjectInfo = function (finished) {
@@ -118,7 +122,7 @@ var InitCommand = /** @class */ (function () {
                     fse.copySync(path.join(__dirname, "./init/template/"), path.join(process.cwd(), "./"), {
                         overwrite: true
                     });
-                    fse.writeFile(path.join(process.cwd(), "./package.json"), JSON.stringify(initProject.packageJson, null, 2), function (error) {
+                    fse.writeFile(path.join(process.cwd(), "./package.json"), JSON.stringify(initProject.packageJson, null, 4), function (error) {
                         error ? console.log(error) : null;
                         plexiCoreTerminal.animation.end("success", "Project created!");
                         plexiCoreTerminal.write("Get Started!");

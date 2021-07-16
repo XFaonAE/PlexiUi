@@ -12,14 +12,6 @@ new /** @class */ (function () {
      */
     function Main() {
         var plexiCoreTerminal = this.plexiCoreTerminal = new plexi_core_terminal_1.default();
-        process.stdin.setRawMode(true);
-        process.stdin.setEncoding("ascii");
-        process.stdin.on("data", function (data) {
-            if (data == "\x03") {
-                plexiCoreTerminal.write("Application stopped");
-                process.exit(0);
-            }
-        });
         new InitCommands_1.default(this.plexiCoreTerminal.commandHelper);
         plexiCoreTerminal.commandHelper.run(process.argv.splice(2));
     }

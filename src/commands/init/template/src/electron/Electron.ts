@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { app, BrowserWindow } from "electron";
 import isDev from "electron-is-dev";
+import * as path from "path";
 
 new class Electron {
     /**
@@ -28,19 +29,20 @@ new class Electron {
 
         if (isDev) {
             browserWindow.loadURL("http://localhost:8080").then(() => {
-                console.log(`_plexi-ui -> [ status ] -> (ready) -- JSON -> {
-                    "onProcess": "view",
-                    "in": "dev"
-                }`);
+                console.log("view-ready");
+            }).catch(() => {
+                console.log("view-failed");
             });
+
+            browserWindow.on("closed", () => {
+                console.log("window-closed");
+            })
 
             return;
         }
 
-        browserWindow.loadFile(path.join(__dirname, "./../../build/vue/index.html"));
-        console.log(`_plexi-ui -> [ status ] -> (ready) -- JSON -> {
-            "onProcess": "view",
-            "in": "production"
-        }`);
+        browserWindow.loadFile(path.join(__dirname, "./../../dist/html/index.html")).then(() => {
+
+        });
     }
 }

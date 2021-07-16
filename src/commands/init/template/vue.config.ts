@@ -1,9 +1,11 @@
 import * as path from "path";
 
 module.exports = {
-	pages: {
-		index: {
-			entry: path.join(__dirname, "./src/vue/Vue.js")
-		}
-	}
+    outputDir: path.join("./dist/html"),
+    publicPath: process.env.NODE_ENV == "production" ? "./" : "/",
+    pages: {
+        index: {
+            entry: path.join(__dirname, "./src/vue/Vue.js")
+        }
+    }
 }
