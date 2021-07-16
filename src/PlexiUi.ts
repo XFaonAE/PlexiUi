@@ -13,11 +13,19 @@ new class Main {
 	 * PlexiUI framework entry class
 	 */
 	public constructor() {
-		const pcTerminal = this.plexiCoreTerminal = new PlexiCoreTerminal();
-		pcTerminal.section("PlexiUI");
+        const plexiCoreTerminal = this.plexiCoreTerminal = new PlexiCoreTerminal();
 
-		new InitCommands(pcTerminal.commandHelper);
+        process.stdin.setRawMode(true);
+        process.stdin.setEncoding("ascii");
+        process.stdin.on("data", (data: any) => {
+            if (data == "\x03") {
+                plexiCoreTerminal.write("Application stopped");
+                process.exit(0);
+            }
+        });
 
-		pcTerminal.commandHelper.run(process.argv.splice(2));
+		new InitCommands(this.plexiCoreTerminal.commandHelper);
+
+		plexiCoreTerminal.commandHelper.run(process.argv.splice(2));
 	}
 }

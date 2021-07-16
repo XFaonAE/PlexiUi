@@ -39,7 +39,7 @@ var InitCommand = /** @class */ (function () {
                 var plexiCoreTerminal = new plexi_core_terminal_1.default();
                 var initProject = {
                     packageJson: {
-                        main: "./src/Electron/Electron.js",
+                        main: "./src/electron/Electron.js",
                         description: "",
                         name: "",
                         version: "",
@@ -55,13 +55,16 @@ var InitCommand = /** @class */ (function () {
                             "core-js": "^3.6.5",
                             "vue": "^3.0.0",
                             "vue-router": "^4.0.0-0",
-                            "vuex": "^4.0.0-0"
+                            "vuex": "^4.0.0-0",
+                            "electron": "^13.1.7",
+                            "electron-is-dev": "^2.0.0"
                         },
                         devDependencies: {
                             "@vue/cli-plugin-babel": "~4.5.0",
                             "@vue/cli-plugin-router": "~4.5.0",
                             "@vue/cli-plugin-vuex": "~4.5.0",
-                            "@vue/cli-service": "~4.5.0"
+                            "@vue/cli-service": "~4.5.0",
+                            "@vue/compiler-sfc": "^3.0.0"
                         }
                     }
                 };
@@ -118,6 +121,9 @@ var InitCommand = /** @class */ (function () {
                     fse.writeFile(path.join(process.cwd(), "./package.json"), JSON.stringify(initProject.packageJson, null, 2), function (error) {
                         error ? console.log(error) : null;
                         plexiCoreTerminal.animation.end("success", "Project created!");
+                        plexiCoreTerminal.write("Get Started!");
+                        plexiCoreTerminal.row("npm install", "Install the frameworks components");
+                        plexiCoreTerminal.row("npm run dev", "Start a development server");
                     });
                     plexiCoreTerminal.rl.close();
                 });
