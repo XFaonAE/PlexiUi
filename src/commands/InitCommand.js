@@ -31,15 +31,15 @@ var InitCommand = /** @class */ (function () {
      * @param { CommandHelper } commandHelper CommandHelper class object
      */
     function InitCommand(commandHelper) {
-        commandHelper
-            .addCommand({
+        commandHelper.addCommand({
             trigger: "init",
             desc: "Initialize a new PlexiUi project",
             onTrigger: function (args) {
                 var plexiCoreTerminal = new plexi_core_terminal_1.default();
+                plexiCoreTerminal.section("PlexiUI | Initialize Project");
                 var initProject = {
                     packageJson: {
-                        main: "./src/Electron/Electron.js",
+                        main: "./src/electron/Electron.js",
                         description: "",
                         name: "",
                         version: "",
@@ -52,16 +52,27 @@ var InitCommand = /** @class */ (function () {
                             ""
                         ],
                         dependencies: {
+                            "@electron/remote": "^1.2.0",
                             "core-js": "^3.6.5",
+                            "electron-is-dev": "^2.0.0",
                             "vue": "^3.0.0",
-                            "vue-router": "^4.0.0-0",
+                            "vue-router": "^4.0.10",
                             "vuex": "^4.0.0-0"
                         },
                         devDependencies: {
                             "@vue/cli-plugin-babel": "~4.5.0",
                             "@vue/cli-plugin-router": "~4.5.0",
                             "@vue/cli-plugin-vuex": "~4.5.0",
-                            "@vue/cli-service": "~4.5.0"
+                            "@vue/cli-service": "~4.5.0",
+                            "@vue/compiler-sfc": "^3.0.0",
+                            "electron": "^13.1.7",
+                            "electron-builder": "^22.11.7",
+                            "less": "^3.0.4",
+                            "less-loader": "^5.0.0",
+                            "typescript": "^4.3.5"
+                        },
+                        build: {
+                            asar: false
                         }
                     }
                 };
@@ -115,9 +126,12 @@ var InitCommand = /** @class */ (function () {
                     fse.copySync(path.join(__dirname, "./init/template/"), path.join(process.cwd(), "./"), {
                         overwrite: true
                     });
-                    fse.writeFile(path.join(process.cwd(), "./package.json"), JSON.stringify(initProject.packageJson, null, 2), function (error) {
+                    fse.writeFile(path.join(process.cwd(), "./package.json"), JSON.stringify(initProject.packageJson, null, 4), function (error) {
                         error ? console.log(error) : null;
                         plexiCoreTerminal.animation.end("success", "Project created!");
+                        plexiCoreTerminal.write("Get Started!");
+                        plexiCoreTerminal.row("npm install", "Install the frameworks components");
+                        plexiCoreTerminal.row("npm run dev", "Start a development server");
                     });
                     plexiCoreTerminal.rl.close();
                 });

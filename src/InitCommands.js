@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var HelpCommand_1 = __importDefault(require("./commands/HelpCommand"));
 var DevCommand_1 = __importDefault(require("./commands/DevCommand"));
 var InitCommand_1 = __importDefault(require("./commands/InitCommand"));
+var BuildCommand_1 = __importDefault(require("./commands/BuildCommand"));
 var InitCommands = /** @class */ (function () {
     /**
      * Initialize all commands
@@ -15,6 +16,7 @@ var InitCommands = /** @class */ (function () {
         new HelpCommand_1.default(commandHelper);
         new DevCommand_1.default(commandHelper);
         new InitCommand_1.default(commandHelper);
+        new BuildCommand_1.default(commandHelper);
     }
     return InitCommands;
 }());

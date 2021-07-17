@@ -11,10 +11,9 @@ new /** @class */ (function () {
      * PlexiUI framework entry class
      */
     function Main() {
-        var pcTerminal = this.plexiCoreTerminal = new plexi_core_terminal_1.default();
-        pcTerminal.section("PlexiUI");
-        new InitCommands_1.default(pcTerminal.commandHelper);
-        pcTerminal.commandHelper.run(process.argv.splice(2));
+        var plexiCoreTerminal = this.plexiCoreTerminal = new plexi_core_terminal_1.default();
+        new InitCommands_1.default(this.plexiCoreTerminal.commandHelper);
+        plexiCoreTerminal.commandHelper.run(process.argv.splice(2));
     }
     return Main;
 }());

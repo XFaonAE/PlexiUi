@@ -13,11 +13,10 @@ new class Main {
 	 * PlexiUI framework entry class
 	 */
 	public constructor() {
-		const pcTerminal = this.plexiCoreTerminal = new PlexiCoreTerminal();
-		pcTerminal.section("PlexiUI");
+        const plexiCoreTerminal = this.plexiCoreTerminal = new PlexiCoreTerminal();
 
-		new InitCommands(pcTerminal.commandHelper);
+		new InitCommands(this.plexiCoreTerminal.commandHelper);
 
-		pcTerminal.commandHelper.run(process.argv.splice(2));
+		plexiCoreTerminal.commandHelper.run(process.argv.splice(2));
 	}
 }
