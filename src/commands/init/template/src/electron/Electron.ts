@@ -40,6 +40,24 @@ new class Electron {
             browserWindow.webContents.send("system:themeUpdated");
         });
 
+        ipcMain.on("electron:stop", (event: any, arg: any) => {
+            browserWindow.close();
+            app.exit();
+        });
+
+        ipcMain.on("electron:size", (event: any, arg: any) => {
+            if (browserWindow.isMaximized()) {
+                browserWindow.restore();
+                return;
+            }
+
+            browserWindow.maximize();
+        });
+
+        ipcMain.on("electron:minimize", (event: any, arg: any) => {
+            browserWindow.minimize();
+        });
+
         if (isDev) {
             browserWindow.loadURL("http://localhost:8080").then(() => {
                 console.log("view-ready");

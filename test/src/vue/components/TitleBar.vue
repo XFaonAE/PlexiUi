@@ -5,15 +5,15 @@
         </span>
 
         <div class="buttons">
-            <button>
+            <button @click="electronMinimize">
                 <i class="ms-Icon ms-Icon--ChromeMinimize"></i>
             </button>
 
-            <button>
+            <button @click="electronSize">
                 <i class="ms-Icon ms-Icon--Checkbox"></i>
             </button>
 
-            <button>
+            <button @click="electronStop" class="close">
                 <i class="ms-Icon ms-Icon--ChromeClose"></i>
             </button>
         </div>
@@ -21,12 +21,25 @@
 </template>
 
 <script>
+const { ipcRenderer } = window.require("electron");
+
 export default {
     name: "TitleBar",
     data: () => {
         return {
             title: "No Title"
         };
+    },
+    methods: {
+        electronStop: () => {
+            ipcRenderer.send("electron:stop");
+        },
+        electronSize: () => {
+            ipcRenderer.send("electron:size");
+        },
+        electronMinimize: () => {
+            ipcRenderer.send("electron:minimize");
+        }
     }
 }
 </script>
@@ -73,6 +86,10 @@ export default {
             &:hover {
                 background: @layer1;
                 transition-duration: 100ms;
+
+                &.close {
+                    background: @destructive;
+                }
             }
         }
     }

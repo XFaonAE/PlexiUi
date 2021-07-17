@@ -36,26 +36,27 @@ export default {
     color: @contrast;
     display: flex;
     align-items: center;
+    position: relative;
     justify-content: center;
     border-radius: 4px;
     transition-duration: 300ms;
 
     .center {
         width: 100%;
-        position: relative;
         display: flex;
         transition-duration: 300ms;
         align-items: center;
         justify-content: center;
 
         .border {
-            height: 100%;
+            height: 20px;
             width: 4px;
             border-radius: 4px;
             position: absolute;
             transition-duration: 300ms;
-            top: 0;
+            top: 25px;
             left: 0;
+            transform: translate(0px, -50%);
         }
 
         .icon {

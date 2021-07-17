@@ -70,6 +70,7 @@ export default {
 
 <style lang="less">
 @import "./components/Config";
+
 * {
     box-sizing: border-box;
     outline: none;

@@ -55,6 +55,20 @@ new /** @class */ (function () {
         electron_1.nativeTheme.on("updated", function () {
             browserWindow.webContents.send("system:themeUpdated");
         });
+        electron_1.ipcMain.on("electron:stop", function (event, arg) {
+            browserWindow.close();
+            electron_1.app.exit();
+        });
+        electron_1.ipcMain.on("electron:size", function (event, arg) {
+            if (browserWindow.isMaximized()) {
+                browserWindow.restore();
+                return;
+            }
+            browserWindow.maximize();
+        });
+        electron_1.ipcMain.on("electron:minimize", function (event, arg) {
+            browserWindow.minimize();
+        });
         if (electron_is_dev_1.default) {
             browserWindow.loadURL("http://localhost:8080").then(function () {
                 console.log("view-ready");
