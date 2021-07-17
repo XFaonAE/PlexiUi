@@ -54,7 +54,16 @@ export default class DevCommand {
 
                         let ready = false;
                         vue.stdout.setEncoding("utf8");
+                        vue.stderr.setEncoding("utf8");
                         vue.stdout.on("data", (data: string) => {
+                            if (!ready && data.startsWith(" DONE")) {
+                                ready = true;
+                                processes.push(vue);
+                                done();
+                            }
+                        });
+
+                        vue.stderr.on("data", (data: string) => {
                             if (!ready && data.startsWith(" DONE")) {
                                 ready = true;
                                 processes.push(vue);

@@ -66,7 +66,15 @@ var DevCommand = /** @class */ (function () {
                         ]);
                         var ready = false;
                         vue.stdout.setEncoding("utf8");
+                        vue.stderr.setEncoding("utf8");
                         vue.stdout.on("data", function (data) {
+                            if (!ready && data.startsWith(" DONE")) {
+                                ready = true;
+                                processes.push(vue);
+                                done();
+                            }
+                        });
+                        vue.stderr.on("data", function (data) {
                             if (!ready && data.startsWith(" DONE")) {
                                 ready = true;
                                 processes.push(vue);
