@@ -11,18 +11,22 @@
         </div>
 
         <div class="bar" v-if="bar">
-            BAR
         </div>
     </div>
 </template>
 
-<script lang="ts">
+<script>
 export default {
     name: "SideBar",
     props: [
         "rail",
         "bar"
-    ]
+    ],
+    mounted() {
+        if ((window && window.process && window.process.type) !== "renderer") {
+            this.$el.classList.add("noTitleBar");
+        }
+    }
 }
 </script>
 
@@ -31,16 +35,44 @@ export default {
 
 .SideBar {
     height: 100%;
-    background: @layer0;
+    background: @layer1;
+    display: flex;
+    flex-direction: row;
+    transition-duration: 300ms;
+
+    .bar {
+        width: 290px;
+        height: 100%;
+        background: @layer0;
+        transition-duration: 300ms;
+
+        @media (max-width: 1000px) {
+            width: 0;
+            transition-duration: 100ms;
+            border-color: @layer0;
+        }
+    }
 
     .rail {
         width: 70px;
         height: 100%;
         color: @contrast;
         display: flex;
-        overflow: auto;
+        padding-top: 5px;
+        overflow-y: auto;
+        transition-duration: 300ms;
+        overflow-x: hidden;
         justify-content: space-between;
         flex-direction: column;
+
+        @media (max-width: 1000px) {
+            background: @layer0;
+        }
+
+        @media (max-width: 700px) {
+            width: 0;
+            transition-duration: 100ms;
+        }
 
         & > div {
             display: flex;

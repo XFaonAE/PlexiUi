@@ -1,14 +1,13 @@
 // @ts-nocheck
-import {createApp} from "vue";
-import Main from "./Main.vue";
-import {createRouter, createWebHistory} from "vue-router";
+import { createApp } from "vue";
+import Main from "./Main";
+import { createRouter, createWebHistory } from "vue-router";
+import Home from "./views/Home";
 
 const routes = [
     {
         path: "/",
-        component: {
-            template: ""
-        }
+        component: Home
     },
     {
         path: "/info",

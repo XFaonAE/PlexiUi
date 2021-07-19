@@ -2,7 +2,7 @@
     <div class="Main">
         <TitleBar />
         <div class="body">
-            <SideBar :rail=true>
+            <SideBar :rail=true :bar=true>
                 <template v-slot:railTop>
                     <SideBarRailButton icon="ms-Icon ms-Icon--Home" label="Home" href="/" />
 
@@ -18,6 +18,8 @@
                 <RouterView />
             </div>
         </div>
+
+        <AppBar />
     </div>
 </template>
 
@@ -25,9 +27,11 @@
 import SideBar from "./components/SideBar";
 import SideBarRailButton from "./components/SideBarRailButton";
 import TitleBar from "./components/TitleBar";
+import AppBar from "./components/AppBar";
 
 export default {
     components: {
+        AppBar,
         TitleBar,
         SideBarRailButton,
         SideBar
@@ -41,11 +45,11 @@ export default {
         if ((window && window.process && window.process.type) === "renderer") {
             this.electron = true;
         }
-
-        const ipcRenderer = window.require("electron").ipcRenderer;
         const body = document.querySelector("body");
 
         if (this.electron) {
+            const ipcRenderer = window.require("electron").ipcRenderer;
+
             ipcRenderer.send("system:isDark");
 
             ipcRenderer.on("system:isDark.reply", (event, dark) => {
@@ -63,7 +67,11 @@ export default {
             ipcRenderer.on("system:themeUpdated", (event, arg) => {
                 ipcRenderer.send("system:isDark");
             });
+            return;
         }
+
+        body.classList.remove("_SYSTEM__lightPalette");
+        body.classList.add("_SYSTEM__darkPalette");
     }
 }
 </script>
@@ -89,11 +97,16 @@ export default {
         height: 100%;
         flex-direction: row;
 
+        @media (max-width: 700px) {
+            height: calc(100% - 50px);
+        }
+
         .content {
             background: @layer1;
             width: 100%;
             height: 100%;
-            border-radius: 4px 0 0 0 ;
+            border-radius: 4px 0 0 0;
+            overflow: auto;
         }
     }
 }
@@ -103,6 +116,7 @@ body {
     padding: 0;
     font-size: 13px;
     background: @layer0;
+    overflow: hidden;
     color: #fff;
     opacity: 1;
 }
