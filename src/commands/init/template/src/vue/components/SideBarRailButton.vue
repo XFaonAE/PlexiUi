@@ -1,15 +1,8 @@
 <template>
     <RouterLink :to="href ? href : '///no///route///found///'" class="SideBarRailButton">
         <div class="center">
-            <div class="border">
-
-            </div>
-
-            <span class="icon">
-                <i :class="icon"></i>
-
-                <span v-if="label">{{ label }}</span>
-            </span>
+            <div class="border"></div>
+            <i :class="'icon ' + icon"></i>
         </div>
     </RouterLink>
 </template>
@@ -19,8 +12,7 @@ export default {
     name: "SideBarRailButton",
     props: [
         "href",
-        "icon",
-        "label"
+        "icon"
     ]
 }
 </script>
@@ -64,25 +56,23 @@ export default {
             display: flex;
             align-items: center;
             flex-direction: column;
-
-            span {
-                font-size: 11px;
-                margin-top: 10px;
-                overflow: hidden;
-                transition-duration: 300ms;
-            }
+            color: @contrast;
+            transition-duration: 300ms;
         }
     }
 
     &:hover {
         transition-duration: 100ms;
-        background: @layer1;
+        background: @layer0;
+
+        @media (max-width: 1000px) {
+            background: @layer1;
+        }
     }
 
     &.router-link-active {
         color: @accent;
         transition-duration: 100ms;
-        background: @layer1;
 
         .center {
             transition-duration: 100ms;
@@ -94,14 +84,7 @@ export default {
 
             .icon {
                 transition-duration: 100ms;
-
-                span {
-                    height: 0;
-                    opacity: 0;
-                    margin: 0;
-                    padding: 0;
-                    transition-duration: 100ms;
-                }
+                color: @accent;
             }
         }
     }

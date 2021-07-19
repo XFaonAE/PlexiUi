@@ -21,24 +21,38 @@
 </template>
 
 <script>
-const { ipcRenderer } = window.require("electron");
-
 export default {
     name: "TitleBar",
-    data: () => {
+    data() {
         return {
-            title: "No Title"
+            title: "No Title",
+            electron: false
         };
     },
+    mounted() {
+        if ((window && window.process && window.process.type) === "renderer") {
+            this.electron = window.require("electron");
+            return;
+        }
+
+        this.$el.remove();
+    },
     methods: {
-        electronStop: () => {
-            ipcRenderer.send("electron:stop");
+        getElectron() {
+            if (this.electron) {
+                return this.electron;
+            }
+
+            return null;
         },
-        electronSize: () => {
-            ipcRenderer.send("electron:size");
+        electronStop() {
+            this.getElectron()?.ipcRenderer.send("electron:stop");
         },
-        electronMinimize: () => {
-            ipcRenderer.send("electron:minimize");
+        electronSize() {
+            this.getElectron()?.ipcRenderer.send("electron:size");
+        },
+        electronMinimize() {
+            this.getElectron()?.ipcRenderer.send("electron:minimize");
         }
     }
 }
@@ -88,7 +102,7 @@ export default {
                 transition-duration: 100ms;
 
                 &.close {
-                    background: @destructive;
+                    border-color: @destructive;
                 }
             }
         }
